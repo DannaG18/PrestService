@@ -1,0 +1,153 @@
+.listContainer {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 600px;
+  }
+  
+  .listTitle {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+  }
+  
+  .searchBar {
+    display: flex;
+    margin-bottom: 1rem;
+  }
+  
+  .searchInput {
+    flex-grow: 1;
+    padding: 0.5rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.25rem 0 0 0.25rem;
+    font-size: 1rem;
+  }
+  
+  .searchButton {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 0 0.25rem 0.25rem 0;
+    padding: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .searchButton:hover {
+    background-color: #4f46e5;
+  }
+  
+  .emptyMessage {
+    text-align: center;
+    color: #6b7280;
+  }
+  
+  .list {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .listItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  
+  .listItem:last-child {
+    border-bottom: none;
+  }
+  
+  .internalCode {
+    font-weight: 500;
+    color: var(--primary-color);
+  }
+  
+  .supplyName {
+    color: var(--text-color);
+    flex-grow: 1;
+    margin: 0 1rem;
+  }
+  
+  .actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+  
+  .editButton,
+  .deleteButton {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0.25rem;
+    transition: color 0.2s;
+  }
+  
+  .editButton {
+    color: var(--primary-color);
+  }
+  
+  .editButton:hover {
+    color: #4f46e5;
+  }
+  
+  .deleteButton {
+    color: #ef4444;
+  }
+  
+  .deleteButton:hover {
+    color: #dc2626;
+  }
+  
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1rem;
+  }
+  
+  .paginationButton {
+    background-color: transparent;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    padding: 0.25rem 0.5rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .paginationButton:hover:not(:disabled) {
+    background-color: var(--primary-color);
+    color: white;
+  }
+  
+  .paginationButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  .pageInfo {
+    margin: 0 1rem;
+    font-size: 0.875rem;
+    color: var(--text-color);
+  }
+  
+  @media (max-width: 767px) {
+    .listItem {
+      flex-wrap: wrap;
+    }
+  
+    .internalCode {
+      margin-bottom: 0.25rem;
+      width: 100%;
+    }
+  
+    .supplyName {
+      margin: 0;
+      width: calc(100% - 2rem);
+    }
+  }

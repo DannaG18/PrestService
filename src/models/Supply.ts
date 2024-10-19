@@ -1,5 +1,4 @@
 export interface Supply {
-    id: number;
-    internalCode: string;
+    codInternal: string;
     supplyName: string;
 }

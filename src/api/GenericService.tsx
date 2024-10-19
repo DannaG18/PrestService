@@ -1,6 +1,6 @@
 import axios, { AxiosResponse} from "axios";
 
-export class ReusableService<T, ID> {
+export class GenericService<T, ID> {
     private apiUrl: string;
 
     constructor(apiUrl: string) {
@@ -47,6 +47,7 @@ export class ReusableService<T, ID> {
     async create(entity: T): Promise<T> {
         try {
             const response: AxiosResponse<T> = await axios.post<T>(this.apiUrl, entity);
+            console.log(response);
             return response.data;
         } catch (error) {
             console.error('Error saving entity:', error);
