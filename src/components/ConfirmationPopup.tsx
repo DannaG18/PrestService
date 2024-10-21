@@ -3,12 +3,12 @@ import styles from '../styles/ConfirmationPopup.module.css';
 
 interface ConfirmationPopupProps {
   // isOpen: boolean;
-  onClose: () => void;
+  onCancel: () => void;
   onConfirm: () => void;
   message: string;
 }
 
-const ConfirmationPopup: React.FC<ConfirmationPopupProps> = ({  onClose, onConfirm, message }) => {
+const ConfirmationPopup: React.FC<ConfirmationPopupProps> = ({  onCancel, onConfirm, message }) => {
   // if (!isOpen) return null;
 
   return (
@@ -17,7 +17,7 @@ const ConfirmationPopup: React.FC<ConfirmationPopupProps> = ({  onClose, onConfi
         <p className={styles.message}>{message}</p>
         <div className={styles.buttonContainer}>
           <button
-            onClick={onClose}
+            onClick={onCancel}
             className={`${styles.button} ${styles.cancelButton}`}
           >
             Cancel

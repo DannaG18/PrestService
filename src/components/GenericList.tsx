@@ -1,282 +1,281 @@
 import React, { useEffect, useState } from 'react';
-import styles from '../styles/EntityList.module.css';
 import { Trash2, Edit2, Search, ChevronLeft, ChevronRight } from 'lucide-react';
-import ConfirmationPopup from './ConfirmationPopup';
+import styles from '../styles/GenericList.module.css';
 
-// Generic type T for the entity
-interface GenericListProps<T> {
-  entityName: string; // For display titles like "Supply Inventory"
-  entityService: {
-    findAll: () => Promise<T[]>;
-    findById: (id: number) => Promise<T | null>;
-    update: (item: Partial<T>, id: number) => Promise<void>;
-    delete: (id: number) => Promise<void>;
-  };
-  entityKeys: {
-    id: keyof T;
-    name: keyof T;
-    internalCode: keyof T;
-  };
+interface Entity {
+    id: number;
+    [key: string]: any;
 }
 
-const GenericList = <T extends { [key: string]: any }>({
-  entityName,
-  entityService,
-  entityKeys,
-}: GenericListProps<T>) => {
-  const [entities, setEntities] = useState<T[]>([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filteredEntities, setFilteredEntities] = useState<T[]>([]);
-  const [editingEntity, setEditingEntity] = useState<T | null>(null);
-  const [editedEntity, setEditedEntity] = useState<Partial<T>>({});
-  const [searchResult, setSearchResult] = useState<T | null>(null);
-  const [searchError, setSearchError] = useState<string>('');
-  const [currentPage, setCurrentPage] = useState(1);
-  const entitiesPerPage = 5;
-  const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
-  const [entityToDelete, setEntityToDelete] = useState<number | null>(null);
+interface EntityField {
+    name: string;
+    label: string;
+    type: string;
+}
 
-  useEffect(() => {
-    const fetchEntities = async () => {
-      try {
-        const data = await entityService.findAll();
-        setEntities(data);
-        setFilteredEntities(data);
-      } catch (error) {
-        console.error(`Error fetching ${entityName.toLowerCase()}s:`, error);
-      }
+interface GenericListProps<T extends Entity> {
+    entityName: string;
+    fields: EntityField[];
+    fetchAll: () => Promise<T[]>;
+    fetchById: (id: number) => Promise<T>;
+    deleteEntity: (id: number) => Promise<void>;
+    updateEntity: (entity: T, id: number) => Promise<T>;
+    itemsPerPage?: number;
+    ConfirmationPopup: React.FC<{
+        onCancel: () => void;
+        onConfirm: () => void;
+        message: string;
+    }>;
+}
+
+const GenericList = <T extends Entity>({
+    entityName,
+    fields,
+    fetchAll,
+    fetchById,
+    deleteEntity,
+    updateEntity,
+    itemsPerPage = 5,
+    ConfirmationPopup,
+}: GenericListProps<T>) => {
+    const [items, setItems] = useState<T[]>([]);
+    const [filteredItems, setFilteredItems] = useState<T[]>([]);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [editingItem, setEditingItem] = useState<T | null>(null);
+    const [editedItem, setEditedItem] = useState<Partial<T>>({});
+    const [searchResult, setSearchResult] = useState<T | null>(null);
+    const [searchError, setSearchError] = useState<string>('');
+    const [currentPage, setCurrentPage] = useState(1);
+    const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
+    const [itemToDelete, setItemToDelete] = useState<number | null>(null);
+
+    useEffect(() => {
+        const loadItems = async () => {
+            try {
+                const data = await fetchAll();
+                setItems(data);
+                setFilteredItems(data);
+            } catch (error) {
+                console.error(`Error fetching ${entityName}:`, error);
+            }
+        };
+        loadItems();
+    }, [entityName, fetchAll]);
+
+    const handleDeleteClick = (id: number) => {
+        setItemToDelete(id);
+        setIsConfirmationOpen(true);
     };
 
-    fetchEntities();
-  }, [entityService, entityName]);
-
-  const handleDeleteClick = (id: number) => {
-    setEntityToDelete(id);
-    setIsConfirmationOpen(true);
-  };
-
-  const handleDeleteConfirm = async () => {
-    if (entityToDelete !== null) {
-      try {
-        await entityService.delete(entityToDelete);
-        setEntities((prevEntities) =>
-          prevEntities.filter((entity) => entity[entityKeys.id] !== entityToDelete)
-        );
-        setFilteredEntities((prevEntities) =>
-          prevEntities.filter((entity) => entity[entityKeys.id] !== entityToDelete)
-        );
-        if (searchResult && searchResult[entityKeys.id] === entityToDelete) {
-          setSearchResult(null);
+    const handleDeleteConfirm = async () => {
+        if (itemToDelete !== null) {
+            try {
+                await deleteEntity(itemToDelete);
+                setItems(prevItems => prevItems.filter(item => item.id !== itemToDelete));
+                setFilteredItems(prevItems => prevItems.filter(item => item.id !== itemToDelete));
+                if (searchResult && searchResult.id === itemToDelete) {
+                    setSearchResult(null);
+                }
+            } catch (error) {
+                console.error(`Error deleting ${entityName}:`, error);
+            }
         }
-      } catch (error) {
-        console.error(`Error deleting ${entityName.toLowerCase()}:`, error);
-      }
-    }
-    setIsConfirmationOpen(false);
-    setEntityToDelete(null);
-  };
+        setIsConfirmationOpen(false);
+        setItemToDelete(null);
+    };
 
-  const handleDeleteCancel = () => {
-    setIsConfirmationOpen(false);
-    setEntityToDelete(null);
-  };
+    const handleDeleteCancel = () => {
+        setIsConfirmationOpen(false);
+        setItemToDelete(null);
+    };
 
-  const handleEdit = (entity: T) => {
-    setEditingEntity(entity);
-    setEditedEntity(entity);
-  };
+    const handleEdit = (item: T) => {
+        setEditingItem(item);
+        setEditedItem(item);
+    };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setEditedEntity((prev) => ({ ...prev, [name]: value }));
-  };
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setEditedItem(prev => ({ ...prev, [name]: value }));
+    };
 
-  const handleSave = async () => {
-    if (editingEntity) {
-      try {
-        await entityService.update(editedEntity as T, editingEntity[entityKeys.id]);
-        setEntities((prev) =>
-          prev.map((entity) =>
-            entity[entityKeys.id] === editingEntity[entityKeys.id]
-              ? { ...entity, ...editedEntity }
-              : entity
-          )
-        );
-        setFilteredEntities((prev) =>
-          prev.map((entity) =>
-            entity[entityKeys.id] === editingEntity[entityKeys.id]
-              ? { ...entity, ...editedEntity }
-              : entity
-          )
-        );
-        setEditingEntity(null);
-        setEditedEntity({});
-      } catch (error) {
-        console.error(`Error updating ${entityName.toLowerCase()}:`, error);
-      }
-    }
-  };
+    const handleSave = async () => {
+        if (editingItem) {
+            try {
+                await updateEntity(editedItem as T, editingItem.id);
+                setItems(prev =>
+                    prev.map(item => (item.id === editingItem.id ? { ...item, ...editedItem } : item))
+                );
+                setFilteredItems(prev =>
+                    prev.map(item => (item.id === editingItem.id ? { ...item, ...editedItem } : item))
+                );
+                setEditingItem(null);
+                setEditedItem({});
+            } catch (error) {
+                console.error(`Error updating ${entityName}:`, error);
+            }
+        }
+    };
 
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value);
-  };
+    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchTerm(event.target.value);
+    };
 
-  const handleSearchSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setSearchError('');
-    setSearchResult(null);
+    const handleSearchSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        setSearchError('');
+        setSearchResult(null);
 
-    try {
-      if (!searchTerm || isNaN(Number(searchTerm))) {
-        setSearchError('Please enter a valid numeric ID');
-        return;
-      }
+        try {
+            if (!searchTerm || isNaN(Number(searchTerm))) {
+                setSearchError('Please enter a valid numeric ID');
+                return;
+            }
 
-      const foundEntity = await entityService.findById(Number(searchTerm));
-      setSearchResult(foundEntity);
-    } catch (error) {
-      console.error(`Error searching ${entityName.toLowerCase()}:`, error);
-      setSearchError(`${entityName} not found`);
-    }
-  };
+            const foundItem = await fetchById(Number(searchTerm));
+            setSearchResult(foundItem);
+        } catch (error) {
+            console.error(`Error searching ${entityName}:`, error);
+            setSearchError(`${entityName} not found`);
+        }
+    };
 
-  const indexOfLastEntity = currentPage * entitiesPerPage;
-  const indexOfFirstEntity = indexOfLastEntity - entitiesPerPage;
-  const currentEntities = filteredEntities.slice(indexOfFirstEntity, indexOfLastEntity);
-  const totalPages = Math.ceil(filteredEntities.length / entitiesPerPage);
+    // Pagination logic
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = filteredItems.slice(indexOfFirstItem, indexOfLastItem);
+    const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
 
-  const handleNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
+    const handleNextPage = () => {
+        if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+    };
 
-  const handlePrevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
+    const handlePrevPage = () => {
+        if (currentPage > 1) setCurrentPage(currentPage - 1);
+    };
 
-  return (
-    <div className={styles.container}>
-      <div className={styles.listContainer}>
-        <h2 className={styles.listTitle}>{entityName} Inventory</h2>
-        {filteredEntities.length === 0 ? (
-          <p className={styles.emptyMessage}>No {entityName.toLowerCase()}s registered yet.</p>
-        ) : (
-          <div className={styles.tableWrapper}>
-            <div className={styles.tableGrid}>
-              <div className={styles.tableHeader}>ID</div>
-              <div className={styles.tableHeader}>Internal Code</div>
-              <div className={styles.tableHeader}>{entityName} Name</div>
-              <div className={styles.tableHeader}>Actions</div>
-              {currentEntities.map((entity) => (
-                <React.Fragment key={entity[entityKeys.id]}>
-                  <div className={styles.tableCell}>{entity[entityKeys.id]}</div>
-                  <div className={styles.tableCell}>
-                    {editingEntity?.[entityKeys.id] === entity[entityKeys.id] ? (
-                      <input
-                        type="text"
-                        name={String(entityKeys.internalCode)}
-                        value={editedEntity[entityKeys.internalCode] || ''}
-                        onChange={handleChange}
-                        className={styles.editInput}
-                      />
-                    ) : (
-                      entity[entityKeys.internalCode]
-                    )}
-                  </div>
-                  <div className={styles.tableCell}>
-                    {editingEntity?.[entityKeys.id] === entity[entityKeys.id] ? (
-                      <input
-                        type="text"
-                        name={String(entityKeys.name)}
-                        value={editedEntity[entityKeys.name] || ''}
-                        onChange={handleChange}
-                        className={styles.editInput}
-                      />
-                    ) : (
-                      entity[entityKeys.name]
-                    )}
-                  </div>
-                  <div className={styles.actions}>
-                    {editingEntity?.[entityKeys.id] === entity[entityKeys.id] ? (
-                      <button className={styles.saveButton} onClick={handleSave}>
-                        Save
-                      </button>
-                    ) : (
-                      <button
-                        className={styles.editButton}
-                        aria-label={`Edit ${entityName}`}
-                        onClick={() => handleEdit(entity)}
-                      >
-                        <Edit2 size={18} />
-                      </button>
-                    )}
+    return (
+        <div className={styles.container}>
+            <div className={styles.listContainer}>
+                <h2 className={styles.listTitle}>{entityName} Inventory</h2>
+                {filteredItems.length === 0 ? (
+                    <p className={styles.emptyMessage}>No {entityName.toLowerCase()} registered yet.</p>
+                ) : (
+                    <div className={styles.tableWrapper}>
+                        <div className={styles.tableGrid}>
+                            {fields.map(field => (
+                                <div key={field.name} className={styles.tableHeader}>
+                                    {field.label}
+                                </div>
+                            ))}
+                            <div className={styles.tableHeader}>Actions</div>
+
+                            {currentItems.map((item) => (
+                                <React.Fragment key={item.id}>
+                                    {fields.map(field => (
+                                        <div key={field.name} className={styles.tableCell}>
+                                            {editingItem?.id === item.id ? (
+                                                <input
+                                                    type={field.type}
+                                                    name={field.name}
+                                                    value={editedItem[field.name] || ''}
+                                                    onChange={handleChange}
+                                                    className={styles.editInput}
+                                                />
+                                            ) : (
+                                                item[field.name]
+                                            )}
+                                        </div>
+                                    ))}
+                                    <div className={styles.actions}>
+                                        {editingItem?.id === item.id ? (
+                                            <button className={styles.saveButton} onClick={handleSave}>
+                                                Save
+                                            </button>
+                                        ) : (
+                                            <button
+                                                className={styles.editButton}
+                                                aria-label={`Edit ${entityName}`}
+                                                onClick={() => handleEdit(item)}
+                                            >
+                                                <Edit2 size={18} />
+                                            </button>
+                                        )}
+                                        <button
+                                            className={styles.deleteButton}
+                                            aria-label={`Delete ${entityName}`}
+                                            onClick={() => handleDeleteClick(item.id)}
+                                        >
+                                            <Trash2 size={18} />
+                                        </button>
+                                    </div>
+                                </React.Fragment>
+                            ))}
+                        </div>
+                    </div>
+                )}
+                <div className={styles.pagination}>
                     <button
-                      className={styles.deleteButton}
-                      aria-label={`Delete ${entityName}`}
-                      onClick={() => handleDeleteClick(entity[entityKeys.id])}
+                        className={styles.paginationButton}
+                        onClick={handlePrevPage}
+                        disabled={currentPage === 1}
                     >
-                      <Trash2 size={18} />
+                        <ChevronLeft size={18} />
                     </button>
-                  </div>
-                </React.Fragment>
-              ))}
+                    <span className={styles.pageInfo}>
+                        Page {currentPage} of {totalPages}
+                    </span>
+                    <button
+                        className={styles.paginationButton}
+                        onClick={handleNextPage}
+                        disabled={currentPage === totalPages}
+                    >
+                        <ChevronRight size={18} />
+                    </button>
+                </div>
             </div>
-          </div>
-        )}
-        <div className={styles.pagination}>
-          <button className={styles.paginationButton} onClick={handlePrevPage} disabled={currentPage === 1}>
-            <ChevronLeft size={18} />
-          </button>
-          <span className={styles.pageInfo}>Page {currentPage} of {totalPages}</span>
-          <button className={styles.paginationButton} onClick={handleNextPage} disabled={currentPage === totalPages}>
-            <ChevronRight size={18} />
-          </button>
+
+            <div className={styles.listContainer}>
+                <h2 className={styles.listTitle}>Search {entityName}</h2>
+                <form className={styles.searchBar} onSubmit={handleSearchSubmit}>
+                    <input
+                        type="text"
+                        placeholder="Search by ID..."
+                        className={styles.searchInput}
+                        value={searchTerm}
+                        onChange={handleSearchChange}
+                    />
+                    <button type="submit" className={styles.searchButton}>
+                        <Search size={20} />
+                    </button>
+                </form>
+                {searchResult && (
+                    <div className={styles.searchResult}>
+                        <h3>{entityName} Found:</h3>
+                        <div className={styles.resultGrid}>
+                            {fields.map(field => (
+                                <React.Fragment key={field.name}>
+                                    <div className={styles.resultLabel}>{field.label}:</div>
+                                    <div className={styles.resultValue}>
+                                        {searchResult[field.name]}
+                                    </div>
+                                </React.Fragment>
+                            ))}
+                        </div>
+                    </div>
+                )}
+                {searchError && <p className={styles.searchError}>{searchError}</p>}
+            </div>
+
+            {isConfirmationOpen && (
+                <ConfirmationPopup
+                    onCancel={handleDeleteCancel}
+                    onConfirm={handleDeleteConfirm}
+                    message={`Are you sure you want to delete this ${entityName.toLowerCase()}?`}
+                />
+            )}
         </div>
-      </div>
-      <div className={styles.listContainer}>
-        <h2 className={styles.listTitle}>Search {entityName} by ID</h2>
-        <form onSubmit={handleSearchSubmit} className={styles.searchForm}>
-          <input
-            type="text"
-            value={searchTerm}
-            onChange={handleSearchChange}
-            placeholder="Enter ID"
-            className={styles.searchInput}
-          />
-          <button type="submit" className={styles.searchButton} aria-label="Search">
-            <Search size={20} />
-          </button>
-        </form>
-        {searchError && <p className={styles.errorMessage}>{searchError}</p>}
-        {searchResult ? (
-          <div className={styles.searchResult}>
-            <h3>Search Result</h3>
-            <p>ID: {searchResult[entityKeys.id]}</p>
-            <p>Internal Code: {searchResult[entityKeys.internalCode]}</p>
-            <p>{entityName} Name: {searchResult[entityKeys.name]}</p>
-            <button
-              className={styles.deleteButton}
-              onClick={() => handleDeleteClick(searchResult[entityKeys.id])}
-            >
-              <Trash2 size={18} />
-            </button>
-          </div>
-        ) : (
-          searchTerm && <p>No results found.</p>
-        )}
-      </div>
-      {isConfirmationOpen && (
-        <ConfirmationPopup
-          message={`Are you sure you want to delete this ${entityName.toLowerCase()}?`}
-          onConfirm={handleDeleteConfirm}
-          onClose={handleDeleteCancel}
-        />
-      )}
-    </div>
-  );
+    );
 };
 
 export default GenericList;
