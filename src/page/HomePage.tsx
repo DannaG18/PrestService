@@ -3,12 +3,16 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import LiveChat from '../components/LiveChat';
 import styles from '../styles/App.module.css';
+import SupplyForm from '../components/SupplyForm';
+import SupplyList from '../components/SupplyList';
 
 const HomePage: React.FC = () => {
     return (
         <div className={styles.app}>
           <Navbar />
-          <main className={styles.main}>
+          <SupplyForm/>
+          {/* <SupplyList/> */}
+          {/* <main className={styles.main}>
             <div className={styles.hero}>
               <h1>Welcome to PrestService</h1>
               <p>Your one-stop solution for all your service needs.</p>
@@ -28,7 +32,7 @@ const HomePage: React.FC = () => {
                 <p>Get quick and accurate quotes for all your service requirements.</p>
               </div>
             </div>
-          </main>
+          </main> */}
           <Footer />
           <LiveChat />
         </div>

@@ -38,7 +38,16 @@ export class GenericService<T, ID> {
             const url = this.buildUrl(id);
             const response: AxiosResponse<T> = await axios.get<T>(url);
             return response.data;
-        }catch(error) {
+        } catch(error) {
+            if (axios.isAxiosError(error)) {
+                if (error.response?.status === 404) {
+                    throw new Error('Entity not found');
+                }
+                if (error.response?.status === 500) {
+                    console.error('Server error:', error.response.data);
+                    throw new Error('Server error occurred');
+                }
+            }
             console.error(`Error fetching entity with ID ${id}:`, error);
             throw error;
         }
