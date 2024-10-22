@@ -1,5 +1,5 @@
-import { ApprovalStatus } from '../models/ApprovalStatus';
-import { GenericService } from './GenericService';
+import { ApprovalStatus } from '../../models/ApprovalStatus';
+import { GenericService } from '../GenericService';
 
 /**
  * We extend GenericService and specify the entity type and ID type.

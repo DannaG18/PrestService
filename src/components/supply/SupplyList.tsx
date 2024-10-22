@@ -1,8 +1,8 @@
 import React from 'react';
-import GenericList from './GenericList';
-import { Supply } from '../models/Supply';
-import { SupplyService } from '../api/SupplyService';
-import ConfirmationPopup from './ConfirmationPopup';
+import GenericList from '../GenericList';
+import { Supply } from '../../models/Supply';
+import { SupplyService } from '../../api/services/SupplyService';
+import ConfirmationPopup from '../ConfirmationPopup';
 
 // Instancia del servicio
 const supplyService = new SupplyService();

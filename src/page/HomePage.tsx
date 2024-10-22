@@ -1,10 +1,10 @@
 import React from 'react';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
-import LiveChat from '../components/LiveChat';
+import Navbar from '../components/home/Navbar';
+import Footer from '../components/home/Footer';
+import LiveChat from '../components/home/LiveChat';
 import styles from '../styles/App.module.css';
-import SupplyForm from '../components/SupplyForm';
-import SupplyList from '../components/SupplyList';
+import SupplyForm from '../components/supply/SupplyForm';
+import SupplyList from '../components/supply/SupplyList';
 
 const HomePage: React.FC = () => {
     return (

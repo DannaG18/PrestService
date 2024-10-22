@@ -1,6 +1,6 @@
 import React from 'react';
 import { X, Facebook, Apple, Mail } from 'lucide-react';
-import styles from '../styles/LoginPopup.module.css';
+import styles from '../../styles/LoginPopup.module.css';
 
 interface LoginPopupProps {
   onClose: () => void;

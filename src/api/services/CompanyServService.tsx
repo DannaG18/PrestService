@@ -1,5 +1,5 @@
-import { CompanyService } from "../models/CompanyService";
-import { GenericService } from "./GenericService";
+import { CompanyService } from "../../models/CompanyService";
+import { GenericService } from "../GenericService";
 
 
 /**

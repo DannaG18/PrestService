@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import FormComponent from './GenericForm';
-import { Supply } from '../models/Supply';
-import { SupplyService } from '../api/SupplyService';
+import FormComponent from '../GenericForm';
+import { Supply } from '../../models/Supply';
+import { SupplyService } from '../../api/services/SupplyService';
 
 const SupplyForm: React.FC = () => {
     const initialData: Supply = {

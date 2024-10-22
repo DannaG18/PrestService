@@ -1,6 +1,6 @@
   import React, { useState } from 'react';
   import { Menu, X, User, ShoppingCart, Search } from 'lucide-react';
-  import styles from '../styles/Navbar.module.css';
+  import styles from '../../styles/Navbar.module.css';
   import LoginPopup from './LoginPopup';
 
   const Navbar: React.FC = () => {

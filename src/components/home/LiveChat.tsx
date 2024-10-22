@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { MessageCircle, X } from 'lucide-react';
-import styles from '../styles/LiveChat.module.css';
+import styles from '../../styles/LoginPopup.module.css'
 
 const LiveChat: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
