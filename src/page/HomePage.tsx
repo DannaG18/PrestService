@@ -3,8 +3,8 @@ import Navbar from '../components/home/Navbar';
 import Footer from '../components/home/Footer';
 import LiveChat from '../components/home/LiveChat';
 import styles from '../styles/App.module.css';
-import SupplyForm from '../components/supply/SupplyForm';
-import SupplyList from '../components/supply/SupplyList';
+import SupplyForm from '../components/warehousemanager/SupplyForm';
+import SupplyList from '../components/warehousemanager/SupplyList';
 
 const HomePage: React.FC = () => {
     return (

@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './styles/App.module.css';
-import SupplyForm from './components/supply/SupplyForm';
-import SupplyList from './components/supply/SupplyList';
+import SupplyForm from './components/warehousemanager/SupplyForm';
+import SupplyList from './components/warehousemanager/SupplyList';
 import { Route, Routes } from "react-router-dom";
 import HomePage from './page/HomePage';
 import './styles/globals.css'

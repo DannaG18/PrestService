@@ -8,7 +8,7 @@ import { GenericService } from "../GenericService";
  */
 interface CompanyServiceId {
     companyId: number;
-    roleId: number;
+    serviceId: number;
 }
 
 export class CompanyServService extends GenericService<CompanyService, CompanyServiceId> {
