@@ -1,4 +1,3 @@
-import React from 'react';
 import styles from './styles/App.module.css';
 import SupplyForm from './components/supply/SupplyForm';
 import SupplyList from './components/supply/SupplyList';

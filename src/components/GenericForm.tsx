@@ -75,7 +75,6 @@ const FormComponent = <T extends { [key: string]: any }>({
                         </div>
                     ))}
 
-                    {/* Submit and View buttons */}
                     <button type="submit" className={styles.submitButton}>Add</button>
                     <button type="button" className={styles.viewButton} onClick={handleViewClick}>
                         View {title}s
