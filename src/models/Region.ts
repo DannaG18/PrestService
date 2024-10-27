@@ -1,7 +1,7 @@
 import { Country } from "./Country";
 
 export interface Region {
-    id: string;
+    id: number;
     country: Country;
-    regionName: string;
+    nameRegion: string;
 }

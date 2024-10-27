@@ -1,7 +1,7 @@
 import { EmailType } from "./EmailType";
 import { Person } from "./Person";
 
-export interface PersonEmail {
+export interface EmailPerson {
     id: number;
     email: string;
     documentNumber: Person;

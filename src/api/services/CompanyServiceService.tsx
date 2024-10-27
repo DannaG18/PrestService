@@ -11,7 +11,7 @@ interface CompanyServiceId {
     roleId: number;
 }
 
-export class CompanyServService extends GenericService<CompanyService, CompanyServiceId> {
+export class CompanyServiceService extends GenericService<CompanyService, CompanyServiceId> {
     constructor() {
         super('http://localhost:8080/api/companyservice');
     }

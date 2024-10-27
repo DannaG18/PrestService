@@ -2,7 +2,7 @@ import { Service } from "./Service";
 import { StatusServiceOrder } from "./StatusServiceOrder";
 import { WorkOrder } from "./WorkOrder";
 
-export interface WorkOrderDetail {
+export interface WorkOrderDetails {
     id: number;
     assignedService: Service;
     date: string;

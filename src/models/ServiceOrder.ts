@@ -1,10 +1,10 @@
-import { OrderStatus } from "./OrderStatus";
+import { StatusOrder } from "./StatusOrder";
 import { Person } from "./Person";
 
 export interface ServiceOrder {
     nroOrden: number;
     clientId: Person;
     employeeId: Person;
-    orderStatus: OrderStatus;
+    orderStatus: StatusOrder;
     orderDate: string;
 }

@@ -1,0 +1,122 @@
+/* AdminDashboard.module.css */
+.app {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    font-family: 'Poppins', sans-serif;
+    color: var(--text-color);
+    background-color: var(--background-color);
+}
+
+.dashboard {
+    display: flex;
+    flex: 1;
+}
+
+.menuButton {
+    display: none;
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    z-index: 1000;
+    padding: 0.5rem 1rem;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.sidebar {
+    width: 250px;
+    background-color: var(--background-color);
+    border-right: 1px solid var(--text-color);
+    padding: 1rem;
+    overflow-y: auto;
+}
+
+.searchInput {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid var(--text-color);
+    border-radius: 4px;
+}
+
+.entityNav {
+    display: flex;
+    flex-direction: column;
+}
+
+.entityButton {
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+    background: none;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.entityButton:hover,
+.entityButton.active {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.mainContent {
+    flex: 1;
+    padding: 2rem;
+}
+
+.entityHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.viewToggle {
+    display: flex;
+}
+
+.toggleButton {
+    padding: 0.5rem 1rem;
+    background-color: var(--background-color);
+    border: 1px solid var(--primary-color);
+    cursor: pointer;
+}
+
+.toggleButton.active {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.entityContent {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+    .menuButton {
+        display: block;
+    }
+
+    .sidebar {
+        position: fixed;
+        left: -250px;
+        top: 0;
+        bottom: 0;
+        transition: left 0.3s ease;
+    }
+
+    .sidebar.open {
+        left: 0;
+    }
+
+    .mainContent {
+        padding: 1rem;
+    }
+}
