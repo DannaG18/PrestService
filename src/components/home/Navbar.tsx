@@ -55,7 +55,7 @@
             <a href="#">Who We Are</a>
           </div>
         </div>
-        {isLoginOpen && <LoginPopup onClose={toggleLogin} />}
+        {isLoginOpen && <LoginPopup onClose={toggleLogin}/>}
       </nav>
     );
   };

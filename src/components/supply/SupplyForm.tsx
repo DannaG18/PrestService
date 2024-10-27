@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import FormComponent from '../GenericForm';
 import { Supply } from '../../models/Supply';
 import { SupplyService } from '../../api/services/SupplyService';
+import styles from '../../styles/App.module.css';
+import NavbarAdmis from '../home/NavBarAdmis';
 
 const SupplyForm: React.FC = () => {
     const initialData: Supply = {
@@ -43,13 +45,14 @@ const SupplyForm: React.FC = () => {
     ];
 
     return (
-        <div>
+        <div className={styles.app}>
+            <NavbarAdmis />
             <FormComponent
                 initialData={initialData}
                 onSubmit={handleSubmit}
                 fields={fields}
                 title="Add New Supply"
-                redirectPath="/supplies" 
+                redirectPath="/supply-view" 
             />
             {loading && <p>Loading...</p>}
             {errors.submit && <span className="error">{errors.submit}</span>}

@@ -7,7 +7,7 @@ import ConfirmationPopup from '../ConfirmationPopup';
 // Instancia del servicio
 const supplyService = new SupplyService();
 
-const SupplyListPage: React.FC = () => {
+const SupplyList: React.FC = () => {
     const fields = [
         { name: 'id', label: 'ID', type: 'text' },
         { name: 'codInternal', label: 'Internal Code', type: 'text' },
@@ -28,4 +28,4 @@ const SupplyListPage: React.FC = () => {
     );
 };
 
-export default SupplyListPage;
+export default SupplyList;
