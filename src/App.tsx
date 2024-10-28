@@ -49,6 +49,8 @@ import EmailTypeForm from './components/emailType/EmailTypeForm';
 import EmailTypeList from './components/emailType/EmailTypeList';
 import OrderDetailForm from './components/orderDetail/OrderDetailForm';
 import OrderDetailList from './components/orderDetail/OrderDetailList';
+import ServiceForm from './components/service/ServiceForm';
+import ServiceList from './components/service/ServiceList';
 // import PersonSupplyForm from './components/personSupply/PersonSupplyForm';
 
 function App() {
@@ -67,6 +69,28 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
+        <Route path="/approval-status-form" element={<ApprovalStatusForm onView={handleViewSupplies} />} />
+        <Route path="/approval-status-view" element={<ApprovalStatusList />} />
+        <Route path="/branch-form" element={<BranchForm onView={handleViewSupplies} />} />
+        <Route path="/branch-view" element={<BranchList />} />
+        <Route path="/city-form" element={<CityForm onView={handleViewSupplies} />} />
+        <Route path="/city-view" element={<CityList />} />
+        <Route path="/company-form" element={<CompanyForm onView={handleViewSupplies} />} />
+        <Route path="/company-view" element={<CompanyList />} />
+        <Route path="/company-service-form" element={<CompanyServiceForm onView={handleViewSupplies} />} />
+        <Route path="/company-service-view" element={<CompanyServiceList />} />
+        <Route path="/company-type-form" element={<CompanyTypeForm onView={handleViewSupplies} />} />
+        <Route path="/company-type-view" element={<CompanyTypeList />} />
+        <Route path="/country-form" element={<CountryForm onView={handleViewSupplies} />} />
+        <Route path="/country-view" element={<CountryList />} />
+        <Route path="/document-type-form" element={<DocumentTypeForm onView={handleViewSupplies} />} />
+        <Route path="/document-type-view" element={<DocumentTypeList />} />
+        <Route path="/email-person-form" element={<EmailPersonForm onView={handleViewSupplies} />} />
+        <Route path="/email-person-view" element={<EmailPersonList />} />
+        <Route path="/email-type-form" element={<EmailTypeForm onView={handleViewSupplies} />} />
+        <Route path="/email-type-view" element={<EmailTypeList />} />
+        <Route path="/order-detail-form" element={<OrderDetailForm onView={handleViewSupplies} />} />
+        <Route path="/order-detail-view" element={<OrderDetailList />} />
         <Route path="/person-form" element={<PersonForm onView={handleViewSupplies} />} />
         <Route path="/person-view" element={<PersonList />} />
         {/* <Route path="/person-supply-form" element={<PersonSupplyForm onView={handleViewSupplies} />} />
