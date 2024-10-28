@@ -1,14 +1,20 @@
-import styles from './styles/App.module.css';
-import { Route, Routes } from "react-router-dom";
+import styles from './styles/App.module.css'; 
+
+import { Route, Routes} from "react-router-dom";
 import HomePage from './page/HomePage';
-import AdminDashboard from './page/AdminDashboard';
-import './styles/globals.css'
+import './styles/globals.css';
+import SupplyForm from './components/supply/SupplyForm';
+import SupplyList from './components/supply/SupplyList';
 
 function App() {
+
+
   return (
     <div className={styles.app}>
       <Routes>
-          <Route path="/" element={<AdminDashboard />} />
+          <Route path="/" element={<HomePage />} />
+          {/* <Route path="/" element={<SupplyForm />} /> */}
+          <Route path="/supplies" element={<SupplyList />} />
       </Routes>
     </div>
   );

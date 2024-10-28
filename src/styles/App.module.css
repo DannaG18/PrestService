@@ -74,6 +74,25 @@
   color: var(--text-color);
 }
 
+.unauthorized {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  text-align: center;
+  padding: 20px;
+}
+
+.unauthorized h1 {
+  color: #d32f2f;
+  margin-bottom: 1rem;
+}
+
+.unauthorized p {
+  color: #666;
+}
+
 @media (max-width: 768px) {
   .hero h1 {
     font-size: 2rem;
