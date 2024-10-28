@@ -52,7 +52,7 @@ export interface PasswordValidationResult {
     let score = 0;
     let feedback = 'Very Weak';
   
-    if (password.length >= 12) score++;
+    if (password.length >= 8) score++;
     if (/[A-Z]/.test(password)) score++;
     if (/[a-z]/.test(password)) score++;
     if (/\d/.test(password)) score++;

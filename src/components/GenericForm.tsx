@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styles from '../styles/GenericForm.module.css';
 
 interface Field<T> {
@@ -25,21 +25,14 @@ const FormComponent = <T extends { [key: string]: any }>({
     fields,
     title,
     onView,
-    handleChange // Recibimos handleChange como prop
+    handleChange
 }: FormComponentProps<T>) => {
-    const [formData, setFormData] = useState<T>(initialData);
     const [errors, setErrors] = useState<{ [key in keyof T]?: string }>({});
-
-    // Actualizar el formData cuando initialData cambia
-    useEffect(() => {
-        setFormData(initialData);
-    }, [initialData]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            await onSubmit(formData);
-            setFormData(initialData);
+            await onSubmit(initialData);
         } catch (error) {
             console.error('Error submitting form:', error);
             setErrors({ submit: 'Error submitting form' });
@@ -52,7 +45,6 @@ const FormComponent = <T extends { [key: string]: any }>({
                 <form className={styles.form} onSubmit={handleSubmit}>
                     <h2 className={styles.formTitle}>{title}</h2>
 
-                    {/* Generar inputs dinámicamente basado en el tipo de campo */}
                     {fields.map((field) => (
                         <div className={styles.inputGroup} key={String(field.name)}>
                             <label htmlFor={field.name as string} className={styles.label}>
@@ -60,12 +52,11 @@ const FormComponent = <T extends { [key: string]: any }>({
                             </label>
 
                             {field.type === 'select' ? (
-                                // Campo tipo select
                                 <select
                                     id={field.name as string}
                                     className={styles.input}
-                                    value={formData[field.name] || ''} 
-                                    onChange={(e) => handleChange(field.name, e.target.value)} // Usamos handleChange pasado desde el padre
+                                    value={initialData[field.name]?.id?.toString() || ''}
+                                    onChange={(e) => handleChange(field.name, e.target.value)}
                                     required={field.required}
                                 >
                                     <option value="">Select {field.label}</option>
@@ -76,23 +67,19 @@ const FormComponent = <T extends { [key: string]: any }>({
                                     ))}
                                 </select>
                             ) : (
-                                // Campo tipo input
                                 <input
                                     type={field.type}
                                     id={field.name as string}
                                     className={styles.input}
-                                    value={formData[field.name] || ''}
-                                    onChange={(e) => handleChange(field.name, e.target.value)} // Usamos handleChange pasado desde el padre
+                                    value={initialData[field.name] || ''}
+                                    onChange={(e) => handleChange(field.name, e.target.value)}
                                     required={field.required}
                                 />
                             )}
-
-                            {/* Mostrar mensaje de error si existe */}
                             {errors[field.name] && <span className={styles.error}>{errors[field.name]}</span>}
                         </div>
                     ))}
 
-                    {/* Botones de Submit y View */}
                     <button type="submit" className={styles.submitButton}>Add</button>
                     <button type="button" className={styles.viewButton} onClick={onView}>
                         View {title}s

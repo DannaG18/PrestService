@@ -38,30 +38,19 @@ const RegionForm: React.FC<{ onView: () => void }> = ({ onView }) => {
     }, []);
 
     const handleChange = (name: keyof Region, value: any) => {
-        if (name === 'country') {
-            const selectedCountry = countries.find(country => country.id.toString() === value);
-            if (selectedCountry) {
-                setFormData(prev => ({
-                    ...prev,
-                    country: {
-                        id: selectedCountry.id,
-                        nameCountry: selectedCountry.nameCountry
-                    }
-                }));
+        setFormData(prev => {
+            if (name === 'country') {
+                const selectedCountry = countries.find(country => country.id.toString() === value);
+                return selectedCountry ? { ...prev, country: selectedCountry } : prev;
             }
-        } else {
-            setFormData(prev => ({
-                ...prev,
-                [name]: value
-            }));
-        }
-        console.log('FormData:', { ...formData, [name]: value }); // Verifica el estado actual
+            return { ...prev, [name]: value };
+        });
     };
 
     const handleSubmit = async (data: Region) => {
         setLoading(true);
         setErrors({});
-        console.log('Submitting Data:', data); // Verifica los datos enviados
+        console.log('Submitting Data:', data);
 
         try {
             if (!data.country || data.country.id === 0) {
@@ -85,7 +74,8 @@ const RegionForm: React.FC<{ onView: () => void }> = ({ onView }) => {
             required: false,
             options: countries.map(country => ({
                 value: country.id.toString(),
-                label: country.nameCountry
+                label: country.nameCountry,
+                key: country.id.toString() // Incluye `key` para React
             }))
         },
         {
@@ -113,4 +103,3 @@ const RegionForm: React.FC<{ onView: () => void }> = ({ onView }) => {
 };
 
 export default RegionForm;
-
