@@ -5,7 +5,6 @@ import AdminDashboard from './page/AdminDashboard';
 import './styles/globals.css';
 import SupplyForm from './components/supply/SupplyForm';
 import SupplyList from './components/supply/SupplyList';
-import LoginPopup from './components/home/LoginPopup';
 import PersonForm from './components/person/PersonForm';
 import PersonList from './components/person/PersonList';
 import PersonTypeForm from './components/personType/PersonTypeForm';
@@ -28,6 +27,28 @@ import WorkOrderDetailsForm from './components/workOrderDetails/WorkOrderDetails
 import WorkOrderDetailsList from './components/workOrderDetails/WorkOrderDetailsList';
 import WorkOrderForm from './components/workOrder/WorkOrderForm';
 import WorkOrderList from './components/workOrder/WorkOrderList';
+import ApprovalStatusForm from './components/approvalStatus/ApprovalStatusForm';
+import ApprovalStatusList from './components/approvalStatus/ApprovalStatusList';
+import BranchForm from './components/branch/BranchForm';
+import BranchList from './components/branch/BranchList';
+import CityForm from './components/city/CItyForm';
+import CityList from './components/city/CityList';
+import CompanyForm from './components/company/CompanyForm';
+import CompanyList from './components/company/CompanyList';
+import CompanyServiceForm from './components/companyService/CompanyServiceForm';
+import CompanyServiceList from './components/companyService/CompanyServiceList';
+import CompanyTypeForm from './components/companyType/CompanyTypeForm';
+import CompanyTypeList from './components/companyType/CompanyTypeList';
+import CountryForm from './components/country/CountryForm';
+import CountryList from './components/country/CountryList';
+import DocumentTypeForm from './components/documentType/DocumentTypeForm';
+import DocumentTypeList from './components/documentType/DocumentTypeList';
+import EmailPersonForm from './components/emailPerson/EmailPersonForm';
+import EmailPersonList from './components/emailPerson/EmailPersonList';
+import EmailTypeForm from './components/emailType/EmailTypeForm';
+import EmailTypeList from './components/emailType/EmailTypeList';
+import OrderDetailForm from './components/orderDetail/OrderDetailForm';
+import OrderDetailList from './components/orderDetail/OrderDetailList';
 // import PersonSupplyForm from './components/personSupply/PersonSupplyForm';
 
 function App() {
@@ -46,6 +67,28 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
+        <Route path="/approval-status-form" element={<ApprovalStatusForm onView={handleViewSupplies} />} />
+        <Route path="/approval-status-view" element={<ApprovalStatusList />} />
+        <Route path="/branch-form" element={<BranchForm onView={handleViewSupplies} />} />
+        <Route path="/branch-view" element={<BranchList />} />
+        <Route path="/city-form" element={<CityForm onView={handleViewSupplies} />} />
+        <Route path="/city-view" element={<CityList />} />
+        <Route path="/company-form" element={<CompanyForm onView={handleViewSupplies} />} />
+        <Route path="/company-view" element={<CompanyList />} />
+        <Route path="/company-service-form" element={<CompanyServiceForm onView={handleViewSupplies} />} />
+        <Route path="/company-service-view" element={<CompanyServiceList />} />
+        <Route path="/company-type-form" element={<CompanyTypeForm onView={handleViewSupplies} />} />
+        <Route path="/company-type-view" element={<CompanyTypeList />} />
+        <Route path="/country-form" element={<CountryForm onView={handleViewSupplies} />} />
+        <Route path="/country-view" element={<CountryList />} />
+        <Route path="/document-type-form" element={<DocumentTypeForm onView={handleViewSupplies} />} />
+        <Route path="/document-type-view" element={<DocumentTypeList />} />
+        <Route path="/email-person-form" element={<EmailPersonForm onView={handleViewSupplies} />} />
+        <Route path="/email-person-view" element={<EmailPersonList />} />
+        <Route path="/email-type-form" element={<EmailTypeForm onView={handleViewSupplies} />} />
+        <Route path="/email-type-view" element={<EmailTypeList />} />
+        <Route path="/order-detail-form" element={<OrderDetailForm onView={handleViewSupplies} />} />
+        <Route path="/order-detail-view" element={<OrderDetailList />} />
         <Route path="/person-form" element={<PersonForm onView={handleViewSupplies} />} />
         <Route path="/person-view" element={<PersonList />} />
         {/* <Route path="/person-supply-form" element={<PersonSupplyForm onView={handleViewSupplies} />} />
