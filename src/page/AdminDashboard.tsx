@@ -3,7 +3,6 @@ import styles from '../styles/AdminDashboard.module.css';
 
 import NavbarAdmis from '../components/home/NavBarAdmis';
 import Footer from '../components/home/Footer';
-import LiveChat from '../components/home/LiveChat';
 
 import SupplyForm from '../components/supply/SupplyForm';
 import SupplyList from '../components/supply/SupplyList';
@@ -13,7 +12,7 @@ import CountryForm from '../components/country/CountryForm';
 import CountryList from '../components/country/CountryList';
 import RegionForm from '../components/region/RegionForm';
 import RegionList from '../components/region/RegionList';
-import CityForm from '../components/city/CItyForm';
+import CityForm from '../components/city/CityForm';
 import CityList from '../components/city/CityList';
 import CompanyTypeForm from '../components/companyType/CompanyTypeForm';
 import CompanyTypeList from '../components/companyType/CompanyTypeList';

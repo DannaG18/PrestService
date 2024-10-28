@@ -8,8 +8,8 @@ import { Region } from '../../models/Region';
 const CityForm: React.FC<{ onView: () => void }> = ({ onView }) => {
     const initialData: City = {
         id: 0,
-        region: { id: 0, nameRegion: '', country: { id: 0, nameCountry: '' } },
-        cityName: ''
+        region: {} as Region,
+        nameCity: ''
     };
 
     const [loading, setLoading] = useState(false);
@@ -25,6 +25,11 @@ const CityForm: React.FC<{ onView: () => void }> = ({ onView }) => {
             try {
                 const fetchedRegions = await regionService.findAll();
                 setRegions(fetchedRegions);
+                if (fetchedRegions.length > 0) {
+                    setFormData(prev => ({
+                        ...prev
+                    }));
+                }
             } catch (error) {
                 console.error('Error fetching regions:', error);
             }
@@ -32,9 +37,32 @@ const CityForm: React.FC<{ onView: () => void }> = ({ onView }) => {
         fetchRegions();
     }, []);
 
+    const handleChange = (name: keyof City, value: any) => {
+        if (name === 'region') {
+            const selectedRegion = regions.find(region => region.id.toString() === value);
+            if (selectedRegion) {
+                setFormData(prev => ({
+                    ...prev,
+                    region: { // Cambia a 'region'
+                        id: selectedRegion.id,
+                        nameRegion: selectedRegion.nameRegion,
+                        country: selectedRegion.country // Incluye correctamente el country
+                    }
+                }));
+            }
+        } else {
+            setFormData(prev => ({
+                ...prev,
+                [name]: value
+            }));
+        }
+        console.log('FormData:', { ...formData, [name]: value });
+    };
+
     const handleSubmit = async (data: City) => {
         setLoading(true);
         setErrors({});
+        console.log('Submitting Data:', data);
         try {
             if (!data.region || data.region.id === 0) {
                 throw new Error('Region is required');
@@ -58,32 +86,16 @@ const CityForm: React.FC<{ onView: () => void }> = ({ onView }) => {
             required: true,
             options: regions.map(region => ({
                 value: region.id.toString(),
-                label: `${region.nameRegion} - ${region.country.nameCountry}` 
+                label: region.nameRegion 
             }))
         },
         {
-            name: 'cityName' as const,
+            name: 'nameCity' as const,
             type: 'text',
             label: 'City Name',
             required: true
         }
     ];
-
-    const handleChange = (name: keyof City, value: any) => {
-        if (name === 'region') {
-            const selectedRegionId = parseInt(value);
-            const selectedRegion = regions.find(region => region.id === selectedRegionId);
-            setFormData(prev => ({
-                ...prev,
-                region: selectedRegion || { id: 0, nameRegion: '', country: { id: 0, nameCountry: '' } }
-            }));
-        } else {
-            setFormData(prev => ({
-                ...prev,
-                [name]: value
-            }));
-        }
-    };
 
     return (
         <div>
@@ -102,3 +114,5 @@ const CityForm: React.FC<{ onView: () => void }> = ({ onView }) => {
 };
 
 export default CityForm;
+
+

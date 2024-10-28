@@ -222,7 +222,7 @@
   }
 
   .tableGrid {
-    grid-template-columns: auto auto 1fr auto;
+    grid-template-columns: auto auto auto auto;
     gap: 1rem;
   }
 

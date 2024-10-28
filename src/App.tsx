@@ -31,7 +31,7 @@ import ApprovalStatusForm from './components/approvalStatus/ApprovalStatusForm';
 import ApprovalStatusList from './components/approvalStatus/ApprovalStatusList';
 import BranchForm from './components/branch/BranchForm';
 import BranchList from './components/branch/BranchList';
-import CityForm from './components/city/CItyForm';
+import CityForm from './components/city/CityForm';
 import CityList from './components/city/CityList';
 import CompanyForm from './components/company/CompanyForm';
 import CompanyList from './components/company/CompanyList';

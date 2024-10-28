@@ -11,7 +11,7 @@ const RegionList: React.FC = () => {
     const fields = [
         { name: 'id', label: 'ID', type: 'text' },
         { name: 'nameRegion', label: 'Region Name', type: 'text' },
-        { name: 'country.nameCountry', label: 'Country Name', type: 'text' } // Mostrar el nombre del país
+        { name: 'country.name', label: 'Country Name', type: 'text' }
     ];
 
     return (
