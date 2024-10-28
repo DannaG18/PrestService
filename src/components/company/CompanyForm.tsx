@@ -8,7 +8,7 @@ import { CompanyTypeService } from '../../api/services/CompanyTypeService';
 const CompanyForm: React.FC<{ onView: () => void }> = ({ onView }) => {
     const initialData: Company = {
         id: 0,
-        name: '',
+        nameCompany: '',
         companyType: {} as CompanyType
     };
 
@@ -26,8 +26,7 @@ const CompanyForm: React.FC<{ onView: () => void }> = ({ onView }) => {
                 setCompanyTypes(fetchedCompanyTypes);
                 if (fetchedCompanyTypes.length > 0) {
                     setFormData(prev => ({
-                        ...prev,
-                        companyType: fetchedCompanyTypes[0]
+                        ...prev
                     }));
                 }
             } catch (error) {
@@ -84,7 +83,7 @@ const CompanyForm: React.FC<{ onView: () => void }> = ({ onView }) => {
             }))
         },
         {
-            name: 'name' as const,
+            name: 'nameCompany' as const,
             type: 'text',
             label: 'Company Name',
             required: true

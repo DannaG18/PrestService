@@ -9,7 +9,7 @@ const personTypeService = new PersonTypeService();
 const PersonTypeList: React.FC = () => {
     const fields = [
         { name: 'id', label: 'ID', type: 'text' },
-        { name: 'name', label: 'Name', type: 'text' },
+        { name: 'namePersonType', label: 'Name', type: 'text' },
     ];
 
     return (

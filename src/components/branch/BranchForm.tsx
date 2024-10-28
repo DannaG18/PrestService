@@ -13,7 +13,7 @@ const BranchForm: React.FC<{ onView: () => void }> = ({ onView }) => {
         nit: '',
         company: {} as Company,
         city: {} as City,
-        branchName: '',
+        nameBranch: '',
         creationDate: ''
     };
 
@@ -31,6 +31,11 @@ const BranchForm: React.FC<{ onView: () => void }> = ({ onView }) => {
             try {
                 const fetchedCompanies = await companyService.findAll();
                 setCompanies(fetchedCompanies);
+                if (fetchedCompanies.length > 0) {
+                    setFormData(prev => ({
+                        ...prev
+                    }));
+                }
             } catch (error) {
                 console.error('Error fetching companies:', error);
             }
@@ -40,6 +45,11 @@ const BranchForm: React.FC<{ onView: () => void }> = ({ onView }) => {
             try {
                 const fetchedCities = await cityService.findAll();
                 setCities(fetchedCities);
+                if (fetchedCities.length > 0) {
+                    setFormData(prev => ({
+                        ...prev
+                    }));
+                }
             } catch (error) {
                 console.error('Error fetching cities:', error);
             }
@@ -96,7 +106,7 @@ const BranchForm: React.FC<{ onView: () => void }> = ({ onView }) => {
             required: true
         },
         {
-            name: 'branchName' as const,
+            name: 'nameBranch' as const,
             type: 'text',
             label: 'Branch Name',
             required: true
@@ -114,7 +124,7 @@ const BranchForm: React.FC<{ onView: () => void }> = ({ onView }) => {
             required: true,
             options: companies.map(company => ({
                 value: company.id.toString(),
-                label: company.name
+                label: company.nameCompany
             }))
         },
         {
@@ -124,7 +134,7 @@ const BranchForm: React.FC<{ onView: () => void }> = ({ onView }) => {
             required: true,
             options: cities.map(city => ({
                 value: city.id.toString(),
-                label: city.cityName
+                label: city.nameCity
             }))
         }
     ];

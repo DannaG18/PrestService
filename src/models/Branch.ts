@@ -6,6 +6,6 @@ export interface Branch {
     nit: string;
     company: Company;
     city: City;
-    branchName: string;
+    nameBranch: string;
     creationDate: string;
 }

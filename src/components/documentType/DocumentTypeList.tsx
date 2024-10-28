@@ -9,7 +9,7 @@ const documentTypeService = new DocumentTypeService();
 const DocumentTypeList: React.FC = () => {
     const fields = [
         { name: 'id', label: 'ID', type: 'text' },
-        { name: 'name', label: 'Name', type: 'text' },
+        { name: 'nameDocumentType', label: 'Name', type: 'text' },
     ];
 
     return (

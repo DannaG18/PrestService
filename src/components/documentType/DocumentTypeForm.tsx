@@ -6,7 +6,7 @@ import { DocumentTypeService } from '../../api/services/DocumentTypeService';
 const DocumentTypeForm: React.FC<{ onView: () => void }> = ({ onView }) => {
     const initialData: DocumentType = {
         id: 0,
-        name: '',
+        nameDocumentType: '',
     };
 
     const [loading, setLoading] = useState(false);
@@ -38,7 +38,7 @@ const DocumentTypeForm: React.FC<{ onView: () => void }> = ({ onView }) => {
 
     const fields = [
         {
-            name: 'name' as const,
+            name: 'nameDocumentType' as const,
             type: 'text',
             label: 'Document Type Name',
             required: true
