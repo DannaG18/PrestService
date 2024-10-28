@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styles from '../styles/AdminDashboard.module.css';
 
-import Navbar from '../components/home/Navbar';
+import NavbarAdmis from '../components/home/NavBarAdmis';
 import Footer from '../components/home/Footer';
 import LiveChat from '../components/home/LiveChat';
 
@@ -111,7 +111,7 @@ const AdminDashboard: React.FC = () => {
 
     return (
         <div className={styles.app}>
-            <Navbar />
+            <NavbarAdmis />
             <div className={styles.dashboard}>
                 <button className={styles.menuButton} onClick={() => setSidebarOpen(!sidebarOpen)}>
                     {sidebarOpen ? 'Close' : 'Menu'}
@@ -167,7 +167,6 @@ const AdminDashboard: React.FC = () => {
                 </main>
             </div>
             <Footer />
-            <LiveChat />
         </div>
     );
 };

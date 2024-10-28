@@ -76,3 +76,8 @@ export interface User {
     password: string;
     repeatedPassword: string;
   }
+
+  export interface PasswordChangeRequest {
+    currentPassword: string;
+    newPassword: string;
+  }

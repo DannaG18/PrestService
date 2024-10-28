@@ -61,7 +61,8 @@ const SupplyForm: React.FC<{ onView: () => void }> = ({ onView }) => {
                 onSubmit={handleSubmit}
                 fields={fields}
                 title="Add New Supply"
-                redirectPath="/supply-view" 
+                onView={onView}
+                handleChange={handleChange}
             />
             {loading && <p>Loading...</p>}
             {errors.submit && <span className="error">{errors.submit}</span>}

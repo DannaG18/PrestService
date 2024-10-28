@@ -3,7 +3,7 @@ import { User } from 'lucide-react';
 import styles from '../../styles/Navbar.module.css';
 import { useAuth } from '../../api/securityservice/AuthenticationContext';
 
-const NavbarCombined: React.FC = () => {
+const NavbarAdmis: React.FC = () => {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const userMenuRef = useRef<HTMLDivElement>(null);
   const { logout, user } = useAuth(); 
@@ -61,4 +61,4 @@ const NavbarCombined: React.FC = () => {
   );
 };
 
-export default NavbarCombined;
+export default NavbarAdmis;

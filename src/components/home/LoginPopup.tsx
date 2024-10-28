@@ -4,6 +4,7 @@ import { useAuth } from '../../api/securityservice/AuthenticationContext';
 import styles from '../../styles/LoginPopup.module.css';
 import SignupPopup from './CreateAccount';
 import { AuthenticationRequest } from '../../models/security/SecurityModels';
+import { getPasswordStrength } from '../../api/securityservice/PasswordUtils';
 
 interface LoginPopupProps {
   onClose: () => void;
@@ -14,7 +15,19 @@ const LoginPopup: React.FC<LoginPopupProps> = ({ onClose }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [passwordStrength, setPasswordStrength] = useState<string>('');
   const { login, error, clearError } = useAuth();
+
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newPassword = e.target.value;
+    setPassword(newPassword);
+    if (newPassword) {
+      const strength = getPasswordStrength(newPassword);
+      setPasswordStrength(strength.feedback);
+    } else {
+      setPasswordStrength('');
+    }
+  };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -62,7 +75,6 @@ const LoginPopup: React.FC<LoginPopupProps> = ({ onClose }) => {
               )}
 
               <div className={styles.buttonContainer}>
-                {/* Social login buttons remain the same */}
                 <button 
                   className={`${styles.button} ${styles.facebookButton}`}
                   onClick={() => handleSocialLogin('Facebook')}
@@ -103,15 +115,24 @@ const LoginPopup: React.FC<LoginPopupProps> = ({ onClose }) => {
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   required
+                  autoComplete="email" // Added autocomplete attribute
                 />
-                <input
-                  type="password"
-                  placeholder="Password"
-                  className={styles.input}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
+                <div className={styles.passwordContainer}>
+                  <input
+                    type="password"
+                    placeholder="Password"
+                    className={styles.input}
+                    value={password}
+                    onChange={handlePasswordChange}
+                    required
+                    autoComplete="new-password" // Added autocomplete attribute
+                  />
+                  {passwordStrength && (
+                    <div className={`${styles.strengthIndicator} ${styles[passwordStrength.toLowerCase().replace(' ', '')]}`}>
+                      {passwordStrength}
+                    </div>
+                  )}
+                </div>
                 <button 
                   type="submit" 
                   className={styles.submitButton}

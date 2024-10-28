@@ -7,31 +7,32 @@ interface AuthContextType {
   user: User | null;
   loading: boolean;
   error: string | null;
+  passwordErrors: string[];
   login: (credentials: AuthenticationRequest) => Promise<void>;
   logout: () => Promise<void>;
   register: (userData: UserDto) => Promise<void>;
   clearError: () => void;
+  checkPasswordExpiration: () => Promise<boolean>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Define role-based routes with default routes for each role
 export const ROLE_ROUTES = {
   ADMIN: {
     routes: ['/supply-form', '/admin-dashboard', '/users-management'],
     default: '/admin-dashboard'
   },
   CUSTOMER: {
-    routes: ['/supply-form', '/supply-view', '/customer-profile'],
+    routes: ['/','/customer-profile', '/change-password'],
+    default: '/'
+  },
+  WAREHOUSE_MANAGER: {
+    routes: ['/supply-view', '/supply-form', '/change-password', ],
     default: '/supply-form'
   },
-  MANAGER: {
-    routes: ['/manager-dashboard', '/reports', '/team-management'],
-    default: '/manager-dashboard'
-  },
   DEFAULT: {
-    routes: ['/home'],
-    default: '/home'
+    routes: ['/', '/change-password'],
+    default: '/'
   }
 };
 
@@ -39,20 +40,22 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [passwordErrors, setPasswordErrors] = useState<string[]>([]);
   const navigate = useNavigate();
   const location = useLocation();
 
-  const clearError = useCallback(() => setError(null), []);
+  const clearError = useCallback(() => {
+    setError(null);
+    setPasswordErrors([]);
+  }, []);
 
   const redirectBasedOnRole = useCallback((user: User) => {
     const role = user.role?.name?.toUpperCase() || 'DEFAULT';
     const roleConfig = ROLE_ROUTES[role as keyof typeof ROLE_ROUTES] || ROLE_ROUTES.DEFAULT;
     
-    // Check if current path is allowed for user's role
     const currentPath = location.pathname;
     const isAllowedPath = roleConfig.routes.includes(currentPath);
     
-    // If current path is not allowed, redirect to role's default route
     if (!isAllowedPath) {
       navigate(roleConfig.default);
     }
@@ -66,25 +69,31 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         if (isValid) {
           const profile = await authService.getProfile();
           setUser(profile);
-          redirectBasedOnRole(profile);
+          
+          // Check password expiration
+          const isExpired = await authService.checkPasswordExpiration();
+          if (isExpired && location.pathname !== '/change-password') {
+            navigate('/change-password');
+          } else {
+            redirectBasedOnRole(profile);
+          }
         } else {
           localStorage.removeItem('jwt');
-          navigate('/login');
+          navigate('/');
         }
       } catch (err) {
         localStorage.removeItem('jwt');
         setError('Session expired');
-        navigate('/login');
+        navigate('/');
       }
     }
     setLoading(false);
-  }, [navigate, redirectBasedOnRole]);
+  }, [navigate, redirectBasedOnRole, location.pathname]);
 
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
 
-  // Effect to verify route access when location changes
   useEffect(() => {
     if (user && !loading) {
       redirectBasedOnRole(user);
@@ -94,13 +103,15 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const login = useCallback(async (credentials: AuthenticationRequest) => {
     setLoading(true);
     clearError();
+
     try {
       await authService.login(credentials);
       const profile = await authService.getProfile();
       setUser(profile);
       redirectBasedOnRole(profile);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Login failed');
+      const errorMessage = err instanceof Error ? err.message : 'Login failed';
+      setError(errorMessage);
       throw err;
     } finally {
       setLoading(false);
@@ -141,10 +152,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         user,
         loading,
         error,
+        passwordErrors,
         login,
         logout,
         register,
-        clearError
+        clearError,
+        checkPasswordExpiration: authService.checkPasswordExpiration
       }}
     >
       {children}
@@ -152,7 +165,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   );
 };
 
-// Custom hook to use auth context
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {

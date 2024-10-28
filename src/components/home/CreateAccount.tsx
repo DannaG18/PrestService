@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { X, Facebook, Apple, Mail, ArrowLeft } from 'lucide-react';
+import { X, Facebook, Apple, Mail, ArrowLeft, Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '../../api/securityservice/AuthenticationContext';
 import { UserDto } from '../../models/security/SecurityModels';
 import styles from '../../styles/LoginPopup.module.css';
 import { useNavigate } from 'react-router-dom';
+import { validatePassword, getPasswordStrength } from '../../api/securityservice/PasswordUtils';
 
 interface SignupPopupProps {
   onBack: () => void;
   onClose: () => void;
 }
+
 const SignupPopup: React.FC<SignupPopupProps> = ({ onClose, onBack }) => {
   const navigate = useNavigate();
   const { register, loading, error, clearError, user } = useAuth();
@@ -19,7 +21,11 @@ const SignupPopup: React.FC<SignupPopupProps> = ({ onClose, onBack }) => {
     repeatedPassword: ''
   });
 
+  // New states for password validation and visibility
   const [showPassword, setShowPassword] = useState(false);
+  const [showRepeatedPassword, setShowRepeatedPassword] = useState(false);
+  const [passwordStrength, setPasswordStrength] = useState<string>('');
+  const [passwordErrors, setPasswordErrors] = useState<string[]>([]);
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
 
@@ -29,12 +35,21 @@ const SignupPopup: React.FC<SignupPopupProps> = ({ onClose, onBack }) => {
     }
   }, [user, navigate]);
 
+  // Updated input handler with password validation
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
       [name]: value
     }));
+
+    if (name === 'password') {
+      const validation = validatePassword(value);
+      setPasswordErrors(validation.errors);
+      const strength = getPasswordStrength(value);
+      setPasswordStrength(strength.feedback);
+    }
+
     if (error) clearError();
     if (formError) setFormError(null);
   };
@@ -48,10 +63,14 @@ const SignupPopup: React.FC<SignupPopupProps> = ({ onClose, onBack }) => {
       setFormError('Please enter a valid email address');
       return false;
     }
-    if (!formData.password || formData.password.length < 8) {
-      setFormError('Password must be at least 8 characters long');
+
+    // Enhanced password validation
+    const passwordValidation = validatePassword(formData.password);
+    if (!passwordValidation.isValid) {
+      setFormError(passwordValidation.errors[0]);
       return false;
     }
+
     if (formData.password !== formData.repeatedPassword) {
       setFormError('Passwords do not match');
       return false;
@@ -77,16 +96,16 @@ const SignupPopup: React.FC<SignupPopupProps> = ({ onClose, onBack }) => {
       };
 
       await register(userData);
-
       setFormData({
         name: '',
         email: '',
         password: '',
         repeatedPassword: ''
       });
-
-      setTermsAccepted(false);  
-      setFormError(null);       // Clear any remaining form errors
+      setTermsAccepted(false);
+      setPasswordErrors([]);
+      setPasswordStrength('');
+      setFormError(null);
     } catch (err: any) {
       if (err.response && err.response.status === 409) {
         setFormError("This email is already registered"); 
@@ -96,7 +115,6 @@ const SignupPopup: React.FC<SignupPopupProps> = ({ onClose, onBack }) => {
     }
   };
 
-
   const handleSocialSignup = (provider: 'facebook' | 'apple' | 'google') => {
     console.log(`${provider} signup clicked`);
   };
@@ -104,14 +122,14 @@ const SignupPopup: React.FC<SignupPopupProps> = ({ onClose, onBack }) => {
   return (
     <div className={styles.overlay}>
       <div className={styles.popup}>
-      <div className={styles.header}>
-        <button onClick={onBack} className={styles.backButton}>
-          <ArrowLeft size={24} />
-        </button>
-        <button onClick={onClose} className={styles.closeButton}>
+        <div className={styles.header}>
+          <button onClick={onBack} className={styles.backButton}>
+            <ArrowLeft size={24} />
+          </button>
+          <button onClick={onClose} className={styles.closeButton}>
             <X size={24} />
           </button>
-      </div>
+        </div>
         
         <div className={styles.content}>
           <h2 className={styles.title}>Create Account</h2>
@@ -175,27 +193,60 @@ const SignupPopup: React.FC<SignupPopupProps> = ({ onClose, onBack }) => {
               />
             </div>
             <div className={styles.inputGroup}>
-              <input
-                type="password"
-                name="password"
-                placeholder="Password"
-                className={styles.input}
-                value={formData.password}
-                onChange={handleInputChange}
-                required
-                minLength={8}
-              />
+              <div className={styles.passwordInput}>
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  name="password"
+                  placeholder="Password"
+                  className={styles.input}
+                  value={formData.password}
+                  onChange={handleInputChange}
+                  required
+                  minLength={12}
+                />
+                <button
+                  type="button"
+                  className={styles.togglePassword}
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
+              </div>
+              {/* New password strength and requirements display */}
+              {passwordStrength && (
+                <div className={`${styles.strengthIndicator} ${styles[passwordStrength.toLowerCase().replace(' ', '')]}`}>
+                  {passwordStrength}
+                </div>
+              )}
+              {passwordErrors.length > 0 && (
+                <div className={styles.passwordRequirements}>
+                  {passwordErrors.map((error, index) => (
+                    <div key={index} className={styles.requirement}>
+                      {error}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
             <div className={styles.inputGroup}>
-              <input
-                type="password"
-                name="repeatedPassword"
-                placeholder="Confirm Password"
-                className={styles.input}
-                value={formData.repeatedPassword}
-                onChange={handleInputChange}
-                required
-              />
+              <div className={styles.passwordInput}>
+                <input
+                  type={showRepeatedPassword ? 'text' : 'password'}
+                  name="repeatedPassword"
+                  placeholder="Confirm Password"
+                  className={styles.input}
+                  value={formData.repeatedPassword}
+                  onChange={handleInputChange}
+                  required
+                />
+                <button
+                  type="button"
+                  className={styles.togglePassword}
+                  onClick={() => setShowRepeatedPassword(!showRepeatedPassword)}
+                >
+                  {showRepeatedPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
+              </div>
             </div>
             <div className={styles.terms}>
               <label className={styles.checkbox}>
@@ -211,7 +262,7 @@ const SignupPopup: React.FC<SignupPopupProps> = ({ onClose, onBack }) => {
             <button
               type="submit"
               className={`${styles.submitButton} ${loading ? styles.loading : ''}`}
-              disabled={loading}
+              disabled={loading || passwordErrors.length > 0}
             >
               {loading ? 'Creating Account...' : 'Create Account'}
             </button>
