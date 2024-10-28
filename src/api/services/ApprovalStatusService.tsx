@@ -7,6 +7,6 @@ import { GenericService } from '../GenericService';
  */
 export class ApprovalStatusService extends GenericService<ApprovalStatus, number> {
     constructor() {
-        super('http://localhost:8080/api/approvalstatus');
+        super('http://localhost:8080/api/approval-status');
     }
 }

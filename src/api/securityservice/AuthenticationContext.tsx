@@ -19,7 +19,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const ROLE_ROUTES = {
   ADMIN: {
-    routes: ['/supply-form', '/admin-dashboard', '/users-management'],
+    routes: ['/supply-form', "/supply-view", '/admin-dashboard', '/person-form', "/person-view", "/person-supply-form", "/person-supply-view", "/person-type-form", "/person-type-view", "/phone-person-form", "/phone-person-view", "/phone-type-form", "/phone-type-view", "/region-form", "/region-view", "/service-approval-form", "/service-approval-view", "/service-order-form", "/service-order-view", "/service-service-form", "/service-service-view", "/service-supply-form", "/service-supply-view", "/status-order-form", "/status-order-view", "/status-service-order-form", "/status-service-order-view", "/supply-service-form", "/supply-service-view", "/work-order-detail-form", "/work-order-detail-view", "/work-order-form", "/work-order-view", ],
     default: '/admin-dashboard'
   },
   CUSTOMER: {
