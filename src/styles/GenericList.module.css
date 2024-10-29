@@ -23,6 +23,11 @@
   text-align: center;
 }
 
+.emptyMessage {
+  text-align: center;
+  color: var(--text-color);
+}
+
 .tableWrapper {
   overflow-x: auto;
 }
@@ -60,12 +65,12 @@ table {
 .editButton,
 .deleteButton,
 .saveButton {
-  padding: 0.25rem;
+  padding: 0.25rem 0.5rem;
   border-radius: 0.25rem;
   border: none;
   cursor: pointer;
   transition: background-color 0.2s;
-  font-size: 0.75rem;
+  font-size: 0.875rem;
 }
 
 .editButton {
@@ -98,7 +103,7 @@ table {
   border-radius: 0.25rem;
   cursor: pointer;
   transition: background-color 0.2s;
-  font-size: 0.75rem;
+  font-size: 0.875rem;
 }
 
 .paginationButton:disabled {
@@ -193,8 +198,8 @@ table {
   .deleteButton,
   .saveButton,
   .paginationButton {
-    font-size: 0.875rem;
-    padding: 0.375rem;
+    font-size: 1rem;
+    padding: 0.375rem 0.75rem;
   }
 }
 
@@ -221,7 +226,8 @@ table {
 
   .tableHeader,
   .tableCell {
-    padding: 0.75rem;
+    padding: 0.5rem;
+    font-size: 0.875rem;
   }
 }
 
@@ -254,6 +260,6 @@ table {
   .saveButton,
   .paginationButton {
     font-size: 1rem;
-    padding: 0.5rem;
+    padding: 0.5rem 1rem;
   }
 }

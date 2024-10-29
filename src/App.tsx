@@ -123,6 +123,7 @@ function App() {
         <Route path="/work-order-view" element={<WorkOrderList />} />
         <Route path="/supply-form" element={<SupplyForm onView={handleViewSupplies} />} />
         <Route path="/supply-view" element={<SupplyList />} />
+        <Route path="/customer-form" element={<SupplyForm onView={handleViewSupplies} />} />
       </Routes>
     </div>
   );
