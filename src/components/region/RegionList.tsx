@@ -29,4 +29,3 @@ const RegionList: React.FC = () => {
 };
 
 export default RegionList;
-

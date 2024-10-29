@@ -23,8 +23,8 @@ export const ROLE_ROUTES = {
     default: '/admin-dashboard'
   },
   CUSTOMER: {
-    routes: ['/','/customer-profile', '/change-password'],
-    default: '/'
+    routes: ['/customer-form','/customer-profile', '/change-password'],
+    default: '/customer-form'
   },
   WAREHOUSE_MANAGER: {
     routes: ['/supply-view', '/supply-form', '/change-password', ],
