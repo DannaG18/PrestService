@@ -2,6 +2,6 @@ import { CompanyType } from "./CompanyType";
 
 export interface Company {
     id: number;
-    name: string;
+    nameCompany: string;
     companyType: CompanyType;
 }

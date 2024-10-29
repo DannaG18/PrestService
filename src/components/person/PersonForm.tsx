@@ -36,6 +36,11 @@ const PersonForm: React.FC<{ onView: () => void }> = ({ onView }) => {
             try {
                 const fetchedDocumentTypes = await documentTypeService.findAll();
                 setDocumentTypes(fetchedDocumentTypes);
+                if (fetchedDocumentTypes.length > 0) {
+                    setFormData(prev => ({
+                        ...prev
+                    }));
+                }
             } catch (error) {
                 console.error('Error fetching document types:', error);
             }
@@ -45,6 +50,11 @@ const PersonForm: React.FC<{ onView: () => void }> = ({ onView }) => {
             try {
                 const fetchedPersonTypes = await personTypeService.findAll();
                 setPersonTypes(fetchedPersonTypes);
+                if (fetchedPersonTypes.length > 0) {
+                    setFormData(prev => ({
+                        ...prev
+                    }));
+                }
             } catch (error) {
                 console.error('Error fetching person types:', error);
             }
@@ -54,6 +64,11 @@ const PersonForm: React.FC<{ onView: () => void }> = ({ onView }) => {
             try {
                 const fetchedBranches = await branchService.findAll();
                 setBranches(fetchedBranches);
+                if (fetchedBranches.length > 0) {
+                    setFormData(prev => ({
+                        ...prev
+                    }));
+                }
             } catch (error) {
                 console.error('Error fetching branches:', error);
             }
@@ -82,7 +97,7 @@ const PersonForm: React.FC<{ onView: () => void }> = ({ onView }) => {
                 }));
             }
         } else if (name === 'branch') {
-            const selectedBranch = branches.find(branch => branch.id === value);
+            const selectedBranch = branches.find(branch => branch.id.toString() === value);
             if (selectedBranch) {
                 setFormData(prev => ({
                     ...prev,
@@ -143,7 +158,7 @@ const PersonForm: React.FC<{ onView: () => void }> = ({ onView }) => {
             required: true,
             options: personTypes.map(type => ({
                 value: type.id.toString(),
-                label: type.name
+                label: type.namePersonType
             }))
         },
         {
@@ -153,7 +168,7 @@ const PersonForm: React.FC<{ onView: () => void }> = ({ onView }) => {
             required: true,
             options: documentTypes.map(type => ({
                 value: type.id.toString(),
-                label: type.name
+                label: type.nameDocumentType
             }))
         },
         {
@@ -163,7 +178,7 @@ const PersonForm: React.FC<{ onView: () => void }> = ({ onView }) => {
             required: true,
             options: branches.map(branch => ({
                 value: branch.id.toString(),
-                label: branch.branchName
+                label: branch.nameBranch
             }))
         }
     ];

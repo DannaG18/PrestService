@@ -26,8 +26,7 @@ const RegionForm: React.FC<{ onView: () => void }> = ({ onView }) => {
                 setCountries(fetchedCountries);
                 if (fetchedCountries.length > 0) {
                     setFormData(prev => ({
-                        ...prev,
-                        country: fetchedCountries[0] // Preseleccionar el primer país
+                        ...prev
                     }));
                 }
             } catch (error) {
@@ -38,19 +37,30 @@ const RegionForm: React.FC<{ onView: () => void }> = ({ onView }) => {
     }, []);
 
     const handleChange = (name: keyof Region, value: any) => {
-        setFormData(prev => {
-            if (name === 'country') {
-                const selectedCountry = countries.find(country => country.id.toString() === value);
-                return selectedCountry ? { ...prev, country: selectedCountry } : prev;
+        if (name === 'country') {
+            const selectedCountry = countries.find(country => country.id.toString() === value);
+            if (selectedCountry) {
+                setFormData(prev => ({
+                    ...prev,
+                    country: {
+                        id: selectedCountry.id,
+                        nameCountry: selectedCountry.nameCountry
+                    }
+                }));
             }
-            return { ...prev, [name]: value };
-        });
+        } else {
+            setFormData(prev => ({
+                ...prev,
+                [name]: value
+            }));
+        }
+        console.log('FormData:', { ...formData, [name]: value }); // Verifica el estado actual
     };
 
     const handleSubmit = async (data: Region) => {
         setLoading(true);
         setErrors({});
-        console.log('Submitting Data:', data);
+        console.log('Submitting Data:', data); // Verifica los datos enviados
 
         try {
             if (!data.country || data.country.id === 0) {
@@ -71,11 +81,10 @@ const RegionForm: React.FC<{ onView: () => void }> = ({ onView }) => {
             name: 'country' as const,
             type: 'select',
             label: 'Country',
-            required: false,
+            required: true,
             options: countries.map(country => ({
                 value: country.id.toString(),
-                label: country.nameCountry,
-                key: country.id.toString() // Incluye `key` para React
+                label: country.nameCountry
             }))
         },
         {

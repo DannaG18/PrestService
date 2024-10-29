@@ -17,13 +17,6 @@ const ServiceForm: React.FC<{ onView: () => void }> = ({ onView }) => {
 
     const serviceService = new ServiceService();
 
-    const handleChange = (name: keyof Service, value: any) => {
-        setFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
-    };
-
     const handleSubmit = async (data: Service) => {
         setLoading(true);
         setErrors({});
@@ -36,6 +29,13 @@ const ServiceForm: React.FC<{ onView: () => void }> = ({ onView }) => {
         } finally {
             setLoading(false);
         }
+    };
+
+    const handleChange = (name: keyof Service, value: any) => {
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
     };
 
     const fields = [
@@ -76,3 +76,4 @@ const ServiceForm: React.FC<{ onView: () => void }> = ({ onView }) => {
 };
 
 export default ServiceForm;
+

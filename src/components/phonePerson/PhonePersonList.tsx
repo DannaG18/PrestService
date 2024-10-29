@@ -10,12 +10,11 @@ const PhonePersonList: React.FC = () => {
     const fields = [
         { name: 'id', label: 'ID', type: 'text' },
         { 
-            name: 'documentNumber', 
+            name: 'documentNumber.name', 
             label: 'Document Number', 
-            type: 'text', 
-            render: (pp: PhonePerson) => `${pp.documentNumber.name} ${pp.documentNumber.lastName}` 
+            type: 'text'
         },
-        { name: 'phoneType', label: 'Phone Type', type: 'text', render: (pp: PhonePerson) => pp.phoneType.description },
+        { name: 'phoneTypeId.description', label: 'Phone Type', type: 'text' },
         { name: 'phone', label: 'Phone', type: 'text' }
     ];
 

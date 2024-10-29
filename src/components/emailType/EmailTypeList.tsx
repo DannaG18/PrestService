@@ -8,7 +8,7 @@ const emailTypeService = new EmailTypeService();
 
 const EmailTypeList: React.FC = () => {
     const fields = [
-        { name: 'name', label: 'Name', type: 'text' },
+        { name: 'nameEmailType', label: 'Name', type: 'text' },
     ];
 
     return (

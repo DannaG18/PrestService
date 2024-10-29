@@ -6,7 +6,7 @@ import { EmailTypeService } from '../../api/services/EmailTypeService';
 const EmailTypeForm: React.FC<{ onView: () => void }> = ({ onView }) => {
     const initialData: EmailType = {
         id: 0,
-        name: '',
+        nameEmailType: '',
     };
 
     const [formData, setFormData] = useState<EmailType>(initialData);
@@ -37,7 +37,7 @@ const EmailTypeForm: React.FC<{ onView: () => void }> = ({ onView }) => {
 
     const fields = [
         {
-            name: 'name' as const,
+            name: 'nameEmailType' as const,
             type: 'text',
             label: 'Name',
             required: true

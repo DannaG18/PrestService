@@ -140,6 +140,11 @@ const GenericList = <T extends Entity>({
         }
     };
 
+    // Function to access nested properties
+    const getNestedValue = (obj: any, key: string) => {
+        return key.split('.').reduce((o, k) => (o || {})[k], obj);
+    };
+
     // Pagination logic
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -154,6 +159,9 @@ const GenericList = <T extends Entity>({
         if (currentPage > 1) setCurrentPage(currentPage - 1);
     };
 
+    // Function to display boolean values as 'Yes' or 'No'
+    const displayBoolean = (value: boolean) => (value ? 'Sí' : 'No');
+
     return (
         <div className={styles.container}>
             <div className={styles.listContainer}>
@@ -162,56 +170,60 @@ const GenericList = <T extends Entity>({
                     <p className={styles.emptyMessage}>No {entityName.toLowerCase()} registered yet.</p>
                 ) : (
                     <div className={styles.tableWrapper}>
-                        <div className={styles.tableGrid}>
-                            {fields.map(field => (
-                                <div key={field.name} className={styles.tableHeader}>
-                                    {field.label}
-                                </div>
-                            ))}
-                            <div className={styles.tableHeader}>Actions</div>
-
-                            {currentItems.map((item) => (
-                                <React.Fragment key={item.id}>
+                        <table className={styles.table}>
+                            <thead>
+                                <tr>
                                     {fields.map(field => (
-                                        <div key={field.name} className={styles.tableCell}>
-                                            {editingItem?.id === item.id ? (
-                                                <input
-                                                    type={field.type}
-                                                    name={field.name}
-                                                    value={editedItem[field.name] || ''}
-                                                    onChange={handleChange}
-                                                    className={styles.editInput}
-                                                />
-                                            ) : (
-                                                item[field.name]
-                                            )}
-                                        </div>
+                                        <th key={field.name}>{field.label}</th>
                                     ))}
-                                    <div className={styles.actions}>
-                                        {editingItem?.id === item.id ? (
-                                            <button className={styles.saveButton} onClick={handleSave}>
-                                                Save
-                                            </button>
-                                        ) : (
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {currentItems.map((item) => (
+                                    <tr key={item.id}>
+                                        {fields.map(field => (
+                                            <td key={`${item.id}-${field.name}`}>
+                                                {editingItem?.id === item.id ? (
+                                                    <input
+                                                        type={field.type}
+                                                        name={field.name}
+                                                        value={editedItem[field.name] || ''}
+                                                        onChange={handleChange}
+                                                        className={styles.editInput}
+                                                    />
+                                                ) : (
+                                                    // Aquí usamos getNestedValue para manejar propiedades anidadas
+                                                    field.type === 'boolean' ? displayBoolean(getNestedValue(item, field.name)) : getNestedValue(item, field.name)
+                                                )}
+                                            </td>
+                                        ))}
+                                        <td className={styles.actions}>
+                                            {editingItem?.id === item.id ? (
+                                                <button className={styles.saveButton} onClick={handleSave}>
+                                                    Save
+                                                </button>
+                                            ) : (
+                                                <button
+                                                    className={styles.editButton}
+                                                    aria-label={`Edit ${entityName}`}
+                                                    onClick={() => handleEdit(item)}
+                                                >
+                                                    <Edit2 size={18} />
+                                                </button>
+                                            )}
                                             <button
-                                                className={styles.editButton}
-                                                aria-label={`Edit ${entityName}`}
-                                                onClick={() => handleEdit(item)}
+                                                className={styles.deleteButton}
+                                                aria-label={`Delete ${entityName}`}
+                                                onClick={() => handleDeleteClick(item.id)}
                                             >
-                                                <Edit2 size={18} />
+                                                <Trash2 size={18} />
                                             </button>
-                                        )}
-                                        <button
-                                            className={styles.deleteButton}
-                                            aria-label={`Delete ${entityName}`}
-                                            onClick={() => handleDeleteClick(item.id)}
-                                        >
-                                            <Trash2 size={18} />
-                                        </button>
-                                    </div>
-                                </React.Fragment>
-                            ))}
-                        </div>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
                     </div>
                 )}
                 <div className={styles.pagination}>
@@ -252,26 +264,24 @@ const GenericList = <T extends Entity>({
                 {searchResult && (
                     <div className={styles.searchResult}>
                         <h3>{entityName} Found:</h3>
-                        <div className={styles.resultGrid}>
+                        <div className={styles.resultDetails}>
                             {fields.map(field => (
-                                <React.Fragment key={field.name}>
-                                    <div className={styles.resultLabel}>{field.label}:</div>
-                                    <div className={styles.resultValue}>
-                                        {searchResult[field.name]}
-                                    </div>
-                                </React.Fragment>
+                                <div key={field.name}>
+                                    <strong>{field.label}:</strong> 
+                                    {field.type === 'boolean' ? displayBoolean(getNestedValue(searchResult, field.name)) : getNestedValue(searchResult, field.name)}
+                                </div>
                             ))}
                         </div>
                     </div>
                 )}
-                {searchError && <p className={styles.searchError}>{searchError}</p>}
+                {searchError && <p className={styles.errorMessage}>{searchError}</p>}
             </div>
 
             {isConfirmationOpen && (
                 <ConfirmationPopup
                     onCancel={handleDeleteCancel}
                     onConfirm={handleDeleteConfirm}
-                    message={`Are you sure you want to delete this ${entityName.toLowerCase()}?`}
+                    message={`Are you sure you want to delete this ${entityName}?`}
                 />
             )}
         </div>
@@ -279,3 +289,4 @@ const GenericList = <T extends Entity>({
 };
 
 export default GenericList;
+

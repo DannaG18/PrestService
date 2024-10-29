@@ -10,18 +10,16 @@ const BranchList: React.FC = () => {
     const fields = [
         { name: 'nit', label: 'NIT', type: 'text' },
         { 
-            name: 'company', 
+            name: 'company.nameCompany', 
             label: 'Company', 
-            type: 'text', 
-            accessor: (branch: Branch) => branch.company.name 
+            type: 'text'
         },
         { 
-            name: 'city', 
+            name: 'city.nameCity', 
             label: 'City', 
-            type: 'text', 
-            accessor: (branch: Branch) => branch.city.cityName 
+            type: 'text'
         },
-        { name: 'branchName', label: 'Branch Name', type: 'text' },
+        { name: 'nameBranch', label: 'Branch Name', type: 'text' },
         { name: 'creationDate', label: 'Creation Date', type: 'text' }
     ];
 

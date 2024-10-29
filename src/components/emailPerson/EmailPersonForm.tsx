@@ -10,11 +10,11 @@ import { PersonService } from '../../api/services/PersonService';
 const EmailPersonForm: React.FC<{ onView: () => void }> = ({ onView }) => {
     const initialData: EmailPerson = {
         id: 0,
-        email: '',
         documentNumber: {} as Person,
-        emailType: {} as EmailType
+        emailType: {} as EmailType,
+        email: ''
     };
-    
+
 
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState<{ submit?: string }>({});
@@ -27,17 +27,34 @@ const EmailPersonForm: React.FC<{ onView: () => void }> = ({ onView }) => {
     const personService = new PersonService();
 
     useEffect(() => {
-        const fetchOptions = async () => {
+        const fetchedEmailTypes = async () => {
             try {
                 const fetchedEmailTypes = await emailTypeService.findAll();
-                const fetchedPersons = await personService.findAll();
                 setEmailTypes(fetchedEmailTypes);
-                setPersons(fetchedPersons);
+                if (fetchedEmailTypes.length > 0) {
+                    setFormData(prev => ({
+                        ...prev
+                    }));
+                }
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
         };
-        fetchOptions();
+        const fetchedPersons = async () => {
+            try {
+                const fetchedPersons = await personService.findAll();
+                setPersons(fetchedPersons);
+                if (fetchedPersons.length > 0) {
+                    setFormData(prev => ({
+                        ...prev
+                    }));
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+        fetchedEmailTypes();
+        fetchedPersons();
     }, []);
 
     const handleChange = (name: keyof EmailPerson, value: any) => {
@@ -98,7 +115,7 @@ const EmailPersonForm: React.FC<{ onView: () => void }> = ({ onView }) => {
             required: true,
             options: emailTypes.map(type => ({
                 value: type.id.toString(),
-                label: type.name
+                label: type.nameEmailType
             }))
         },
         {

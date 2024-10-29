@@ -4,7 +4,7 @@ import { ApprovalStatus } from '../../models/ApprovalStatus';
 import { ApprovalStatusService } from '../../api/services/ApprovalStatusService';
 
 const ApprovalStatusForm: React.FC<{ onView: () => void }> = ({ onView }) => {
-    const initialData: ApprovalStatus = { id: 0, name: '' };
+    const initialData: ApprovalStatus = { id: 0, nameApprovalStatus: '' };
 
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState<{ submit?: string }>({});
@@ -32,7 +32,7 @@ const ApprovalStatusForm: React.FC<{ onView: () => void }> = ({ onView }) => {
 
     const fields = [
         {
-            name: 'name' as const,
+            name: 'nameApprovalStatus' as const,
             type: 'text',
             label: 'Approval Status Name',
             required: true

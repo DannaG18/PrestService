@@ -6,7 +6,7 @@ import { PersonTypeService } from '../../api/services/PersonTypeService';
 const PersonTypeForm: React.FC<{ onView: () => void }> = ({ onView }) => {
     const initialData: PersonType = {
         id: 0, 
-        name: '',
+        namePersonType: '',
     };
 
     const [formData, setFormData] = useState<PersonType>(initialData);
@@ -37,7 +37,7 @@ const PersonTypeForm: React.FC<{ onView: () => void }> = ({ onView }) => {
 
     const fields = [
         {
-            name: 'name' as const,
+            name: 'namePersonType' as const,
             type: 'text',
             label: 'Person Type Name',
             required: true
