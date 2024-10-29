@@ -9,7 +9,7 @@ const approvalStatusService = new ApprovalStatusService();
 const ApprovalStatusList: React.FC = () => {
     const fields = [
         { name: 'id', label: 'ID', type: 'text' },
-        { name: 'name', label: 'Approval Status Name', type: 'text' }
+        { name: 'nameApprovalStatus', label: 'Approval Status Name', type: 'text' }
     ];
 
     return (

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import FormComponent from '../GenericForm'; 
+import FormComponent from '../GenericForm';
 import { PhonePerson } from '../../models/PhonePerson';
 import { PhonePersonService } from '../../api/services/PhonePersonService';
 import { PersonService } from '../../api/services/PersonService'; 
@@ -10,8 +10,8 @@ import { PhoneType } from '../../models/PhoneType';
 const PhonePersonForm: React.FC<{ onView: () => void }> = ({ onView }) => {
     const initialData: PhonePerson = {
         id: 0,
-        documentNumber: {} as Person, 
-        phoneType: {} as PhoneType, 
+        documentNumber: {} as Person,
+        phoneTypeId: {} as PhoneType,
         phone: '',
     };
 
@@ -27,13 +27,31 @@ const PhonePersonForm: React.FC<{ onView: () => void }> = ({ onView }) => {
 
     useEffect(() => {
         const fetchPersons = async () => {
-            const fetchedPersons = await personService.findAll();
-            setPersons(fetchedPersons);
+            try {
+                const fetchedPersons = await personService.findAll();
+                setPersons(fetchedPersons);
+                if (fetchedPersons.length > 0) {
+                    setFormData(prev => ({
+                        ...prev
+                    }));
+                }
+            } catch (error) {
+                console.error('Error fetching persons:', error);
+            }
         };
 
         const fetchPhoneTypes = async () => {
-            const fetchedPhoneTypes = await phoneTypeService.findAll();
-            setPhoneTypes(fetchedPhoneTypes);
+            try {
+                const fetchedPhoneTypes = await phoneTypeService.findAll();
+                setPhoneTypes(fetchedPhoneTypes);
+                if (fetchedPhoneTypes.length > 0) {
+                    setFormData(prev => ({
+                        ...prev
+                    }));
+                }
+            } catch (error) {
+                console.error('Error fetching phone types:', error);
+            }
         };
 
         fetchPersons();
@@ -41,10 +59,28 @@ const PhonePersonForm: React.FC<{ onView: () => void }> = ({ onView }) => {
     }, []);
 
     const handleChange = (name: keyof PhonePerson, value: any) => {
-        setFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
+        if (name === 'documentNumber') {
+            const selectedPerson = persons.find(person => person.documentNumber === value);
+            if (selectedPerson) {
+                setFormData(prev => ({
+                    ...prev,
+                    documentNumber: selectedPerson // Set the full person object
+                }));
+            }
+        } else if (name === 'phoneTypeId') {
+            const selectedPhoneType = phoneTypes.find(type => type.id.toString() === value);
+            if (selectedPhoneType) {
+                setFormData(prev => ({
+                    ...prev,
+                    phoneTypeId: selectedPhoneType // Set the full phone type object
+                }));
+            }
+        } else {
+            setFormData(prev => ({
+                ...prev,
+                [name]: value
+            }));
+        }
     };
 
     const handleSubmit = async (data: PhonePerson) => {
@@ -73,7 +109,7 @@ const PhonePersonForm: React.FC<{ onView: () => void }> = ({ onView }) => {
             }))
         },
         {
-            name: 'phoneType' as const,
+            name: 'phoneTypeId' as const,
             type: 'select',
             label: 'Phone Type',
             required: true,
@@ -107,3 +143,4 @@ const PhonePersonForm: React.FC<{ onView: () => void }> = ({ onView }) => {
 };
 
 export default PhonePersonForm;
+

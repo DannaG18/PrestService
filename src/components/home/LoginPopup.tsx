@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Facebook, Apple, Mail } from 'lucide-react';
+import { X } from 'lucide-react';
 import { useAuth } from '../../api/securityservice/AuthenticationContext';
 import styles from '../../styles/LoginPopup.module.css';
 import SignupPopup from './CreateAccount';
@@ -47,11 +47,7 @@ const LoginPopup: React.FC<LoginPopupProps> = ({ onClose }) => {
       setIsLoading(false);
     }
   };
-
-  const handleSocialLogin = (provider: string) => {
-    console.log(`${provider} login clicked`);
-  };
-
+  
   return (
     <div className={styles.overlay} onClick={onClose}>
       <div className={styles.popup} onClick={e => e.stopPropagation()}>
@@ -73,40 +69,6 @@ const LoginPopup: React.FC<LoginPopupProps> = ({ onClose }) => {
                   {error}
                 </div>
               )}
-
-              <div className={styles.buttonContainer}>
-                <button 
-                  className={`${styles.button} ${styles.facebookButton}`}
-                  onClick={() => handleSocialLogin('Facebook')}
-                  type="button"
-                >
-                  <Facebook size={20} />
-                  Continue with Facebook
-                </button>
-                <button 
-                  className={`${styles.button} ${styles.appleButton}`}
-                  onClick={() => handleSocialLogin('Apple')}
-                  type="button"
-                >
-                  <Apple size={20} />
-                  Continue with Apple
-                </button>
-                <button 
-                  className={`${styles.button} ${styles.googleButton}`}
-                  onClick={() => handleSocialLogin('Google')}
-                  type="button"
-                >
-                  <Mail size={20} />
-                  Continue with Google
-                </button>
-              </div>
-
-              <div className={styles.divider}>
-                <div className={styles.dividerLine}></div>
-                <span className={styles.dividerText}>or</span>
-                <div className={styles.dividerLine}></div>
-              </div>
-
               <form className={styles.form} onSubmit={handleLogin}>
                 <input
                   type="email"

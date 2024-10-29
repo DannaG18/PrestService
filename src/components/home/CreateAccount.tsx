@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Facebook, Apple, Mail, ArrowLeft, Eye, EyeOff } from 'lucide-react';
+import { X, ArrowLeft, Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '../../api/securityservice/AuthenticationContext';
 import { UserDto } from '../../models/security/SecurityModels';
 import styles from '../../styles/LoginPopup.module.css';
@@ -115,10 +115,6 @@ const SignupPopup: React.FC<SignupPopupProps> = ({ onClose, onBack }) => {
     }
   };
 
-  const handleSocialSignup = (provider: 'facebook' | 'apple' | 'google') => {
-    console.log(`${provider} signup clicked`);
-  };
-
   return (
     <div className={styles.overlay}>
       <div className={styles.popup}>
@@ -133,35 +129,6 @@ const SignupPopup: React.FC<SignupPopupProps> = ({ onClose, onBack }) => {
         
         <div className={styles.content}>
           <h2 className={styles.title}>Create Account</h2>
-          
-          <div className={styles.buttonContainer}>
-            <button 
-              className={`${styles.button} ${styles.facebookButton}`}
-              onClick={() => handleSocialSignup('facebook')}
-            >
-              <Facebook size={20} />
-              Sign up with Facebook
-            </button>
-            <button 
-              className={`${styles.button} ${styles.appleButton}`}
-              onClick={() => handleSocialSignup('apple')}
-            >
-              <Apple size={20} />
-              Sign up with Apple
-            </button>
-            <button 
-              className={`${styles.button} ${styles.googleButton}`}
-              onClick={() => handleSocialSignup('google')}
-            >
-              <Mail size={20} />
-              Sign up with Google
-            </button>
-          </div>
-
-          <div className={styles.divider}>
-            <span className={styles.dividerText}>or sign up with email</span>
-          </div>
-
           {(error || formError) && (
             <div className={styles.errorMessage}>
               {error || formError}

@@ -27,27 +27,28 @@
   overflow-x: auto;
 }
 
-.tableGrid {
-  display: grid;
-  grid-template-columns: auto auto 1fr auto;
-  gap: 0.5rem;
-  align-items: center;
+table {
+  width: 100%;
+  border-collapse: collapse;
 }
 
-.tableHeader {
-  font-weight: bold;
-  padding: 0.5rem;
+.table th,
+.table td {
+  padding: 0.75rem;
+  text-align: center;
+  font-size: 0.875rem;
+  border: 1px solid var(--background-color);
+}
+
+.table th {
   background-color: var(--primary-color);
   color: white;
-  text-align: center;
-  font-size: 0.875rem;
+  font-weight: bold;
 }
 
-.tableCell {
-  padding: 0.5rem;
-  text-align: center;
-  border-bottom: 1px solid var(--background-color);
-  font-size: 0.875rem;
+.table td {
+  background-color: white;
+  color: var(--text-color);
 }
 
 .actions {
@@ -80,14 +81,6 @@
 .saveButton {
   background-color: var(--primary-color);
   color: white;
-}
-
-.editInput {
-  width: 100%;
-  padding: 0.25rem;
-  border: 1px solid var(--primary-color);
-  border-radius: 0.25rem;
-  font-size: 0.875rem;
 }
 
 .pagination {

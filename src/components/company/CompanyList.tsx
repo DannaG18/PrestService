@@ -10,7 +10,7 @@ const CompanyList: React.FC = () => {
     const fields = [
         { name: 'id', label: 'ID', type: 'text' },
         { name: 'nameCompany', label: 'Company Name', type: 'text' },
-        { name: 'companyType.name', label: 'Company Type', type: 'text' } // Mostrar el nombre del tipo de compañía
+        { name: 'companyType.description', label: 'Company Type', type: 'text' } // Mostrar el nombre del tipo de compañía
     ];
 
     return (

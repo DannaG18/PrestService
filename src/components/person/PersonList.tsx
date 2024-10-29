@@ -12,9 +12,9 @@ const PersonList: React.FC = () => {
         { name: 'lastName', label: 'Last Name', type: 'text' },
         { name: 'documentNumber', label: 'Document Number', type: 'text' },
         { name: 'registrationDate', label: 'Registration Date', type: 'date' },
-        { name: 'personType.name', label: 'Person Type', type: 'text' }, // Accediendo al nombre del tipo de persona
+        { name: 'personType.namePersonType', label: 'Person Type', type: 'text' }, // Accediendo al nombre del tipo de persona
         { name: 'documentType.name', label: 'Document Type', type: 'text' }, // Accediendo al nombre del tipo de documento
-        { name: 'branch.name', label: 'Branch', type: 'text' }, // Accediendo al nombre de la sucursal
+        { name: 'branch.nameBranch', label: 'Branch', type: 'text' }, // Accediendo al nombre de la sucursal
     ];
 
     return (

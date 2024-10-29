@@ -10,7 +10,7 @@ const BranchList: React.FC = () => {
     const fields = [
         { name: 'nit', label: 'NIT', type: 'text' },
         { 
-            name: 'company.nameBranch', 
+            name: 'company.nameCompany', 
             label: 'Company', 
             type: 'text'
         },

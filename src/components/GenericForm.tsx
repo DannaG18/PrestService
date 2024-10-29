@@ -15,7 +15,7 @@ interface FormComponentProps<T> {
     onSubmit: (data: T) => Promise<void>;
     fields: Field<T>[];
     title: string;
-    onView: () => void; 
+    onView: () => void;
     handleChange: (name: keyof T, value: any) => void; // Añadido handleChange como prop
 }
 
@@ -52,26 +52,48 @@ const FormComponent = <T extends { [key: string]: any }>({
                             </label>
 
                             {field.type === 'select' ? (
-                                <select
+                                field.name === 'documentNumber' ? (
+                                    <select
+                                        id={field.name as string}
+                                        className={styles.input}
+                                        onChange={(e) => handleChange(field.name, e.target.value)} // Manejo de cambios para documentNumber
+                                        required={field.required}
+                                    >
+                                        <option value="">Select {field.label}</option>
+                                        {field.options?.map(option => (
+                                            <option key={option.value} value={option.value}>
+                                                {option.label}
+                                            </option>
+                                        ))}
+                                    </select>
+                                ) : (
+                                    <select
+                                        id={field.name as string}
+                                        className={styles.input}
+                                        onChange={(e) => handleChange(field.name, e.target.value)}
+                                        required={field.required}
+                                    >
+                                        <option value="">Select {field.label}</option>
+                                        {field.options?.map(option => (
+                                            <option key={option.value} value={option.value}>
+                                                {option.label}
+                                            </option>
+                                        ))}
+                                    </select>
+                                )
+                            ) : field.type === 'checkbox' ? (
+                                <input
+                                    type="checkbox"
                                     id={field.name as string}
                                     className={styles.input}
-                                    value={initialData[field.name]?.id?.toString() || ''}
-                                    onChange={(e) => handleChange(field.name, e.target.value)}
+                                    onChange={(e) => handleChange(field.name, e.target.checked)} // Enviar el valor booleano
                                     required={field.required}
-                                >
-                                    <option value="">Select {field.label}</option>
-                                    {field.options?.map(option => (
-                                        <option key={option.value} value={option.value}>
-                                            {option.label}
-                                        </option>
-                                    ))}
-                                </select>
+                                />
                             ) : (
                                 <input
                                     type={field.type}
                                     id={field.name as string}
                                     className={styles.input}
-                                    value={initialData[field.name] || ''}
                                     onChange={(e) => handleChange(field.name, e.target.value)}
                                     required={field.required}
                                 />
@@ -87,7 +109,9 @@ const FormComponent = <T extends { [key: string]: any }>({
                 </form>
             </div>
         </div>
+
     );
 };
 
 export default FormComponent;
+
