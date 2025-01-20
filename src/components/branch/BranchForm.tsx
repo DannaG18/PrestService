@@ -156,5 +156,3 @@ const BranchForm: React.FC<{ onView: () => void }> = ({ onView }) => {
 };
 
 export default BranchForm;
-
-
